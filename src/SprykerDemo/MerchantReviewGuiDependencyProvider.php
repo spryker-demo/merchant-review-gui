@@ -1,25 +1,43 @@
 <?php
 
 /**
- * This file is part of the Spryker Commerce OS.
- * For full license information, please view the LICENSE file that was distributed with this source code.
+ * Copyright © 2016-present Spryker Systems GmbH. All rights reserved.
+ * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-namespace Pyz\Zed\MerchantReviewGui;
+namespace SprykerDemo\Zed\MerchantReviewGui;
 
 use Spryker\Zed\Kernel\AbstractBundleDependencyProvider;
 use Spryker\Zed\Kernel\Container;
 
 /**
- * @method \Pyz\Zed\MerchantReviewGui\MerchantReviewGuiConfig getConfig()
+ * @method \SprykerDemo\Zed\MerchantReviewGui\MerchantReviewGuiConfig getConfig()
  */
 class MerchantReviewGuiDependencyProvider extends AbstractBundleDependencyProvider
 {
+    /**
+     * @var string
+     */
     public const FACADE_MERCHANT_REVIEW = 'FACADE_MERCHANT_REVIEW';
+
+    /**
+     * @var string
+     */
     public const FACADE_LOCALE = 'FACADE_LOCALE';
+
+    /**
+     * @var string
+     */
     public const SERVICE_UTIL_SANITIZE = 'SERVICE_UTIL_SANITIZE';
+
+    /**
+     * @var string
+     */
     public const SERVICE_UTIL_DATE_TIME = 'SERVICE_UTIL_DATE_TIME';
 
+    /**
+     * @var string
+     */
     public const QUERY_CONTAINER_MERCHANT_REVIEW = 'QUERY_CONTAINER_MERCHANT_REVIEW';
 
     /**

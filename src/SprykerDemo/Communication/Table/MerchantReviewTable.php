@@ -1,30 +1,24 @@
 <?php
 
 /**
- * This file is part of the Spryker Commerce OS.
- * For full license information, please view the LICENSE file that was distributed with this source code.
+ * Copyright © 2016-present Spryker Systems GmbH. All rights reserved.
+ * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-namespace Pyz\Zed\MerchantReviewGui\Communication\Table;
+namespace SprykerDemo\Zed\MerchantReviewGui\Communication\Table;
 
 use Generated\Shared\Transfer\LocaleTransfer;
 use Orm\Zed\MerchantReview\Persistence\SpyMerchantReview;
-use Pyz\Zed\MerchantReviewGui\Communication\Form\DeleteMerchantReviewForm;
-use Pyz\Zed\MerchantReviewGui\Communication\Form\StatusMerchantReviewForm;
-use Pyz\Zed\MerchantReviewGui\Persistence\MerchantReviewGuiQueryContainerInterface;
 use Spryker\Service\UtilDateTime\UtilDateTimeServiceInterface;
 use Spryker\Service\UtilSanitize\UtilSanitizeServiceInterface;
 use Spryker\Service\UtilText\Model\Url\Url;
 use Spryker\Zed\Gui\Communication\Table\AbstractTable;
 use Spryker\Zed\Gui\Communication\Table\TableConfiguration;
+use SprykerDemo\Zed\MerchantReviewGui\Communication\Form\DeleteMerchantReviewForm;
+use SprykerDemo\Zed\MerchantReviewGui\Communication\Form\StatusMerchantReviewForm;
 
 class MerchantReviewTable extends AbstractTable
 {
-    /**
-     * @var \Pyz\Zed\MerchantReviewGui\Persistence\MerchantReviewGuiQueryContainerInterface
-     */
-    protected $merchantReviewGuiQueryContainer;
-
     /**
      * @var \Generated\Shared\Transfer\LocaleTransfer
      */
@@ -41,18 +35,15 @@ class MerchantReviewTable extends AbstractTable
     protected $utilSanitizeService;
 
     /**
-     * @param \Pyz\Zed\MerchantReviewGui\Persistence\MerchantReviewGuiQueryContainerInterface $merchantReviewGuiQueryContainer
      * @param \Generated\Shared\Transfer\LocaleTransfer $localeTransfer
      * @param \Spryker\Service\UtilDateTime\UtilDateTimeServiceInterface $utilDateTimeService
      * @param \Spryker\Service\UtilSanitize\UtilSanitizeServiceInterface $utilSanitizeService
      */
     public function __construct(
-        MerchantReviewGuiQueryContainerInterface $merchantReviewGuiQueryContainer,
         LocaleTransfer $localeTransfer,
         UtilDateTimeServiceInterface $utilDateTimeService,
         UtilSanitizeServiceInterface $utilSanitizeService
     ) {
-        $this->merchantReviewGuiQueryContainer = $merchantReviewGuiQueryContainer;
         $this->localeTransfer = $localeTransfer;
         $this->utilDateTimeService = $utilDateTimeService;
         $this->utilSanitizeService = $utilSanitizeService;
@@ -65,7 +56,7 @@ class MerchantReviewTable extends AbstractTable
      *
      * @return \Spryker\Zed\Gui\Communication\Table\TableConfiguration
      */
-    protected function configure(TableConfiguration $config)
+    protected function configure(TableConfiguration $config): TableConfiguration
     {
         $this->setTableIdentifier(MerchantReviewTableConstants::TABLE_IDENTIFIER);
 
@@ -109,7 +100,10 @@ class MerchantReviewTable extends AbstractTable
             MerchantReviewTableConstants::EXTRA_DETAILS,
         ]);
 
-        $config->setDefaultSortField(MerchantReviewTableConstants::COL_ID_MERCHANT_REVIEW, MerchantReviewTableConstants::SORT_DESC);
+        $config->setDefaultSortField(
+            MerchantReviewTableConstants::COL_ID_MERCHANT_REVIEW,
+            MerchantReviewTableConstants::SORT_DESC,
+        );
         $config->setStateSave(false);
 
         return $config;
@@ -120,7 +114,7 @@ class MerchantReviewTable extends AbstractTable
      *
      * @return array
      */
-    protected function prepareData(TableConfiguration $config)
+    protected function prepareData(TableConfiguration $config): array
     {
         $query = $this->merchantReviewGuiQueryContainer->queryMerchantReview($this->localeTransfer->getIdLocale());
 
@@ -156,6 +150,59 @@ class MerchantReviewTable extends AbstractTable
     }
 
     /**
+     * @param \Orm\Zed\MerchantReview\Persistence\SpyMerchantReview $merchantReviewEntity
+     *
+     * @return \DateTime|string
+     */
+    protected function getCreatedAt(SpyMerchantReview $merchantReviewEntity)
+    {
+        return $this->utilDateTimeService->formatDateTime($merchantReviewEntity->getCreatedAt());
+    }
+
+    /**
+     * @param \Orm\Zed\MerchantReview\Persistence\SpyMerchantReview $merchantReviewEntity
+     *
+     * @return string
+     */
+    protected function getCustomerName(SpyMerchantReview $merchantReviewEntity)
+    {
+        return sprintf(
+            '<a href="%s" target="_blank">%s %s</a>',
+            Url::generate('/customer/view', [
+                'id-customer' => $merchantReviewEntity->getVirtualColumn(
+                    MerchantReviewTableConstants::COL_MERCHANT_REVIEW_GUI_ID_CUSTOMER,
+                ),
+            ]),
+            $this->utilSanitizeService->escapeHtml(
+                $merchantReviewEntity->getVirtualColumn(
+                    MerchantReviewTableConstants::COL_MERCHANT_REVIEW_GUI_FIRST_NAME,
+                ),
+            ),
+            $this->utilSanitizeService->escapeHtml(
+                $merchantReviewEntity->getVirtualColumn(MerchantReviewTableConstants::COL_MERCHANT_REVIEW_GUI_LAST_NAME),
+            ),
+        );
+    }
+
+    /**
+     * @param \Orm\Zed\MerchantReview\Persistence\SpyMerchantReview $merchantReviewEntity
+     *
+     * @return mixed
+     */
+    protected function getMerchantName(SpyMerchantReview $merchantReviewEntity)
+    {
+        return sprintf(
+            '<a href="%s" target="_blank">%s</a>',
+            Url::generate('/merchant-gui/edit-merchant', [
+                'id-merchant' => $merchantReviewEntity->getFkMerchant(),
+            ]),
+            $this->utilSanitizeService->escapeHtml(
+                $merchantReviewEntity->getVirtualColumn(MerchantReviewTableConstants::COL_MERCHANT_NAME),
+            ),
+        );
+    }
+
+    /**
      * @param string $status
      *
      * @return string
@@ -174,14 +221,6 @@ class MerchantReviewTable extends AbstractTable
     }
 
     /**
-     * @return string
-     */
-    protected function createShowDetailsButton()
-    {
-        return '<i class="fa fa-chevron-down"></i>';
-    }
-
-    /**
      * @param \Orm\Zed\MerchantReview\Persistence\SpyMerchantReview $merchantReviewEntity
      *
      * @return string
@@ -197,7 +236,7 @@ class MerchantReviewTable extends AbstractTable
             ]),
             'Delete',
             [],
-            DeleteMerchantReviewForm::class
+            DeleteMerchantReviewForm::class,
         );
 
         return implode(' ', $actions);
@@ -246,7 +285,7 @@ class MerchantReviewTable extends AbstractTable
             StatusMerchantReviewForm::class,
             [
                 static::BUTTON_CLASS => 'btn-outline',
-            ]
+            ],
         );
     }
 
@@ -265,8 +304,16 @@ class MerchantReviewTable extends AbstractTable
             StatusMerchantReviewForm::class,
             [
                 static::BUTTON_CLASS => 'btn-view',
-            ]
+            ],
         );
+    }
+
+    /**
+     * @return string
+     */
+    protected function createShowDetailsButton()
+    {
+        return '<i class="fa fa-chevron-down"></i>';
     }
 
     /**
@@ -288,50 +335,7 @@ class MerchantReviewTable extends AbstractTable
                 </tr>
             </table>',
             $this->utilSanitizeService->escapeHtml($merchantReviewEntity->getSummary()),
-            $this->utilSanitizeService->escapeHtml($merchantReviewEntity->getDescription())
+            $this->utilSanitizeService->escapeHtml($merchantReviewEntity->getDescription()),
         );
-    }
-
-    /**
-     * @param \Orm\Zed\MerchantReview\Persistence\SpyMerchantReview $merchantReviewEntity
-     *
-     * @return string
-     */
-    protected function getCustomerName(SpyMerchantReview $merchantReviewEntity)
-    {
-        return sprintf(
-            '<a href="%s" target="_blank">%s %s</a>',
-            Url::generate('/customer/view', [
-                'id-customer' => $merchantReviewEntity->getVirtualColumn(MerchantReviewTableConstants::COL_MERCHANT_REVIEW_GUI_ID_CUSTOMER),
-            ]),
-            $this->utilSanitizeService->escapeHtml($merchantReviewEntity->getVirtualColumn(MerchantReviewTableConstants::COL_MERCHANT_REVIEW_GUI_FIRST_NAME)),
-            $this->utilSanitizeService->escapeHtml($merchantReviewEntity->getVirtualColumn(MerchantReviewTableConstants::COL_MERCHANT_REVIEW_GUI_LAST_NAME))
-        );
-    }
-
-    /**
-     * @param \Orm\Zed\MerchantReview\Persistence\SpyMerchantReview $merchantReviewEntity
-     *
-     * @return mixed
-     */
-    protected function getMerchantName(SpyMerchantReview $merchantReviewEntity)
-    {
-        return sprintf(
-            '<a href="%s" target="_blank">%s</a>',
-            Url::generate('/merchant-gui/edit-merchant', [
-                'id-merchant' => $merchantReviewEntity->getFkMerchant(),
-            ]),
-            $this->utilSanitizeService->escapeHtml($merchantReviewEntity->getVirtualColumn(MerchantReviewTableConstants::COL_MERCHANT_NAME))
-        );
-    }
-
-    /**
-     * @param \Orm\Zed\MerchantReview\Persistence\SpyMerchantReview $merchantReviewEntity
-     *
-     * @return string|\DateTime
-     */
-    protected function getCreatedAt(SpyMerchantReview $merchantReviewEntity)
-    {
-        return $this->utilDateTimeService->formatDateTime($merchantReviewEntity->getCreatedAt());
     }
 }

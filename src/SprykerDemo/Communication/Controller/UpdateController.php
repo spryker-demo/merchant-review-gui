@@ -5,7 +5,7 @@
  * For full license information, please view the LICENSE file that was distributed with this source code.
  */
 
-namespace Pyz\Zed\MerchantReviewGui\Communication\Controller;
+namespace SprykerDemo\Zed\MerchantReviewGui\Communication\Controller;
 
 use Generated\Shared\Transfer\MerchantReviewTransfer;
 use Orm\Zed\MerchantReview\Persistence\Map\SpyMerchantReviewTableMap;
@@ -14,8 +14,7 @@ use Spryker\Zed\Kernel\Communication\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
- * @method \Pyz\Zed\MerchantReviewGui\Communication\MerchantReviewGuiCommunicationFactory getFactory()
- * @method \Pyz\Zed\MerchantReviewGui\Persistence\MerchantReviewGuiQueryContainerInterface getQueryContainer()
+ * @method \SprykerDemo\Zed\MerchantReviewGui\Communication\MerchantReviewGuiCommunicationFactory getFactory()
  */
 class UpdateController extends AbstractController
 {

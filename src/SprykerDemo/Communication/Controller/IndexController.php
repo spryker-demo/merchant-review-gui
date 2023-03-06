@@ -5,13 +5,12 @@
  * For full license information, please view the LICENSE file that was distributed with this source code.
  */
 
-namespace Pyz\Zed\MerchantReviewGui\Communication\Controller;
+namespace SprykerDemo\Zed\MerchantReviewGui\Communication\Controller;
 
 use Spryker\Zed\Kernel\Communication\Controller\AbstractController;
 
 /**
- * @method \Pyz\Zed\MerchantReviewGui\Communication\MerchantReviewGuiCommunicationFactory getFactory()
- * @method \Pyz\Zed\MerchantReviewGui\Persistence\MerchantReviewGuiQueryContainerInterface getQueryContainer()
+ * @method \SprykerDemo\Zed\MerchantReviewGui\Communication\MerchantReviewGuiCommunicationFactory getFactory()
  */
 class IndexController extends AbstractController
 {

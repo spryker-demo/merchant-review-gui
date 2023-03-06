@@ -5,12 +5,11 @@
  * For full license information, please view the LICENSE file that was distributed with this source code.
  */
 
-namespace Pyz\Zed\MerchantReviewGui\Communication\Table;
+namespace SprykerDemo\Zed\MerchantReviewGui\Communication\Table;
 
 use Orm\Zed\Customer\Persistence\Map\SpyCustomerTableMap;
 use Orm\Zed\MerchantReview\Persistence\Map\SpyMerchantReviewTableMap;
-use Pyz\Zed\MerchantReviewGui\Communication\Controller\UpdateController;
-use Pyz\Zed\MerchantReviewGui\Persistence\MerchantReviewGuiQueryContainer;
+use SprykerDemo\Zed\MerchantReviewGui\Communication\Controller\UpdateController;
 use Spryker\Zed\Gui\Communication\Table\TableConfiguration;
 
 /**
