@@ -1,0 +1,26 @@
+{% extends '@Gui/Layout/layout.twig' %}
+
+{% set widget_title = 'My Merchant Reviews & Ratings' | trans %}
+{% block section_title %}{{ widget_title }}{% endblock %}
+
+{% block content %}
+
+    {% embed '@Gui/Partials/widget.twig' with { widget_title: 'List of merchant reviews' } %}
+
+        {% block widget_content %}
+            {{ merchantReviewTable | raw }}
+        {% endblock %}
+
+    {% endembed %}
+
+{% endblock %}
+
+{% block head_css %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ assetsPath('css/spryker-zed-merchant-review-main.css') }}">
+{% endblock %}
+
+{% block footer_js %}
+    {{ parent() }}
+    <script src="{{ assetsPath('js/spryker-zed-merchant-review-main.js') }}"></script>
+{% endblock %}
