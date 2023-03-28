@@ -1,8 +1,8 @@
 <?php
 
 /**
- * This file is part of the Spryker Commerce OS.
- * For full license information, please view the LICENSE file that was distributed with this source code.
+ * Copyright © 2016-present Spryker Systems GmbH. All rights reserved.
+ * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
 namespace SprykerDemo\Zed\MerchantReviewGui\Communication\Controller;
@@ -11,6 +11,7 @@ use Generated\Shared\Transfer\MerchantReviewTransfer;
 use Orm\Zed\MerchantReview\Persistence\Map\SpyMerchantReviewTableMap;
 use Spryker\Service\UtilText\Model\Url\Url;
 use Spryker\Zed\Kernel\Communication\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -18,7 +19,14 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class UpdateController extends AbstractController
 {
+    /**
+     * @var string
+     */
     public const PARAM_ID = 'id';
+
+    /**
+     * @var string
+     */
     protected const ROUTE_TEMPLATES_LIST = '/merchant-review-gui';
 
     /**
@@ -26,7 +34,7 @@ class UpdateController extends AbstractController
      *
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
-    public function approveAction(Request $request)
+    public function approveAction(Request $request): RedirectResponse
     {
         $form = $this->getFactory()->getStatusMerchantReviewForm()->handleRequest($request);
 
@@ -57,7 +65,7 @@ class UpdateController extends AbstractController
      *
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
-    public function rejectAction(Request $request)
+    public function rejectAction(Request $request): RedirectResponse
     {
         $form = $this->getFactory()->getStatusMerchantReviewForm()->handleRequest($request);
 

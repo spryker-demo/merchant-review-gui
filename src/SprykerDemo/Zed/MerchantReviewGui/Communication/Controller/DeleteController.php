@@ -1,8 +1,8 @@
 <?php
 
 /**
- * This file is part of the Spryker Commerce OS.
- * For full license information, please view the LICENSE file that was distributed with this source code.
+ * Copyright © 2016-present Spryker Systems GmbH. All rights reserved.
+ * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
 namespace SprykerDemo\Zed\MerchantReviewGui\Communication\Controller;
@@ -10,6 +10,7 @@ namespace SprykerDemo\Zed\MerchantReviewGui\Communication\Controller;
 use Generated\Shared\Transfer\MerchantReviewTransfer;
 use Spryker\Service\UtilText\Model\Url\Url;
 use Spryker\Zed\Kernel\Communication\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -17,6 +18,9 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class DeleteController extends AbstractController
 {
+    /**
+     * @var string
+     */
     public const PARAM_ID = 'id';
 
     /**
@@ -24,7 +28,7 @@ class DeleteController extends AbstractController
      *
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
-    public function indexAction(Request $request)
+    public function indexAction(Request $request): RedirectResponse
     {
         $form = $this->getFactory()->getDeleteMerchantReviewForm()->handleRequest($request);
 
@@ -32,7 +36,7 @@ class DeleteController extends AbstractController
             $this->addErrorMessage('CSRF token is not valid');
 
             return $this->redirectResponse(
-                Url::generate('/merchant-review-gui')->build()
+                Url::generate('/merchant-review-gui')->build(),
             );
         }
 
@@ -50,7 +54,7 @@ class DeleteController extends AbstractController
         ]);
 
         return $this->redirectResponse(
-            Url::generate('/merchant-review-gui')->build()
+            Url::generate('/merchant-review-gui')->build(),
         );
     }
 }

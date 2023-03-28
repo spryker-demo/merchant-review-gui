@@ -35,6 +35,7 @@ class MerchantReviewGuiCommunicationFactory extends AbstractCommunicationFactory
             $localeTransfer,
             $this->getUtilDateTimeService(),
             $this->getUtilSanitizeServiceInterface(),
+            $this->getMerchantReviewFacade(),
         );
     }
 

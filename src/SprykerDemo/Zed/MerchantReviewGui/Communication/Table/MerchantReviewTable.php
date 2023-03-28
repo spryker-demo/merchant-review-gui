@@ -14,6 +14,7 @@ use Spryker\Service\UtilSanitize\UtilSanitizeServiceInterface;
 use Spryker\Service\UtilText\Model\Url\Url;
 use Spryker\Zed\Gui\Communication\Table\AbstractTable;
 use Spryker\Zed\Gui\Communication\Table\TableConfiguration;
+use SprykerDemo\Zed\MerchantReview\Business\MerchantReviewFacadeInterface;
 use SprykerDemo\Zed\MerchantReviewGui\Communication\Form\DeleteMerchantReviewForm;
 use SprykerDemo\Zed\MerchantReviewGui\Communication\Form\StatusMerchantReviewForm;
 
@@ -35,20 +36,28 @@ class MerchantReviewTable extends AbstractTable
     protected $utilSanitizeService;
 
     /**
+     * @var \SprykerDemo\Zed\MerchantReview\Business\MerchantReviewFacadeInterface
+     */
+    protected MerchantReviewFacadeInterface $merchantReviewFacade;
+
+    /**
      * @param \Generated\Shared\Transfer\LocaleTransfer $localeTransfer
      * @param \Spryker\Service\UtilDateTime\UtilDateTimeServiceInterface $utilDateTimeService
      * @param \Spryker\Service\UtilSanitize\UtilSanitizeServiceInterface $utilSanitizeService
+     * @param \SprykerDemo\Zed\MerchantReview\Business\MerchantReviewFacadeInterface $merchantReviewFacade
      */
     public function __construct(
         LocaleTransfer $localeTransfer,
         UtilDateTimeServiceInterface $utilDateTimeService,
-        UtilSanitizeServiceInterface $utilSanitizeService
+        UtilSanitizeServiceInterface $utilSanitizeService,
+        MerchantReviewFacadeInterface $merchantReviewFacade
     ) {
         $this->localeTransfer = $localeTransfer;
         $this->utilDateTimeService = $utilDateTimeService;
         $this->utilSanitizeService = $utilSanitizeService;
 
         $this->localeTransfer->requireIdLocale();
+        $this->merchantReviewFacade = $merchantReviewFacade;
     }
 
     /**
@@ -116,9 +125,7 @@ class MerchantReviewTable extends AbstractTable
      */
     protected function prepareData(TableConfiguration $config): array
     {
-        $query = $this->merchantReviewGuiQueryContainer->queryMerchantReview($this->localeTransfer->getIdLocale());
-
-        $merchantReviewCollection = $this->runQuery($query, $config, true);
+        $merchantReviewCollection = $this->merchantReviewFacade->getMerchantReviews();
 
         $tableData = [];
         foreach ($merchantReviewCollection as $merchantReviewEntity) {
@@ -133,7 +140,7 @@ class MerchantReviewTable extends AbstractTable
      *
      * @return array
      */
-    protected function generateItem(SpyMerchantReview $merchantReviewEntity)
+    protected function generateItem(SpyMerchantReview $merchantReviewEntity): array
     {
         return [
             MerchantReviewTableConstants::COL_ID_MERCHANT_REVIEW => $merchantReviewEntity->getIdMerchantReview(),
@@ -164,7 +171,7 @@ class MerchantReviewTable extends AbstractTable
      *
      * @return string
      */
-    protected function getCustomerName(SpyMerchantReview $merchantReviewEntity)
+    protected function getCustomerName(SpyMerchantReview $merchantReviewEntity): string
     {
         return sprintf(
             '<a href="%s" target="_blank">%s %s</a>',
@@ -207,7 +214,7 @@ class MerchantReviewTable extends AbstractTable
      *
      * @return string
      */
-    protected function getStatusLabel($status)
+    protected function getStatusLabel(string $status): string
     {
         switch ($status) {
             case MerchantReviewTableConstants::COL_MERCHANT_REVIEW_STATUS_REJECTED:
@@ -225,7 +232,7 @@ class MerchantReviewTable extends AbstractTable
      *
      * @return string
      */
-    protected function createActionButtons(SpyMerchantReview $merchantReviewEntity)
+    protected function createActionButtons(SpyMerchantReview $merchantReviewEntity): string
     {
         $actions = [];
 
@@ -311,7 +318,7 @@ class MerchantReviewTable extends AbstractTable
     /**
      * @return string
      */
-    protected function createShowDetailsButton()
+    protected function createShowDetailsButton(): string
     {
         return '<i class="fa fa-chevron-down"></i>';
     }
@@ -321,7 +328,7 @@ class MerchantReviewTable extends AbstractTable
      *
      * @return string
      */
-    protected function generateDetails(SpyMerchantReview $merchantReviewEntity)
+    protected function generateDetails(SpyMerchantReview $merchantReviewEntity): string
     {
         return sprintf(
             '<table class="details">

@@ -1,13 +1,15 @@
 <?php
 
 /**
- * This file is part of the Spryker Commerce OS.
- * For full license information, please view the LICENSE file that was distributed with this source code.
+ * Copyright © 2016-present Spryker Systems GmbH. All rights reserved.
+ * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
 namespace SprykerDemo\Zed\MerchantReviewGui\Communication\Controller;
 
+use Generated\Shared\Transfer\LocaleTransfer;
 use Spryker\Zed\Kernel\Communication\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
  * @method \SprykerDemo\Zed\MerchantReviewGui\Communication\MerchantReviewGuiCommunicationFactory getFactory()
@@ -17,7 +19,7 @@ class IndexController extends AbstractController
     /**
      * @return array
      */
-    public function indexAction()
+    public function indexAction(): array
     {
         $merchantReviewTable = $this
             ->getFactory()
@@ -31,21 +33,21 @@ class IndexController extends AbstractController
     /**
      * @return \Symfony\Component\HttpFoundation\JsonResponse
      */
-    public function tableAction()
+    public function tableAction(): JsonResponse
     {
         $merchantTable = $this
             ->getFactory()
             ->createMerchantReviewTable($this->getCurrentLocale());
 
         return $this->jsonResponse(
-            $merchantTable->fetchData()
+            $merchantTable->fetchData(),
         );
     }
 
     /**
      * @return \Generated\Shared\Transfer\LocaleTransfer
      */
-    protected function getCurrentLocale()
+    protected function getCurrentLocale(): LocaleTransfer
     {
         return $this->getFactory()
             ->getLocaleFacade()
