@@ -41,6 +41,16 @@ class MerchantReviewGuiDependencyProvider extends AbstractBundleDependencyProvid
     public const QUERY_CONTAINER_MERCHANT_REVIEW = 'QUERY_CONTAINER_MERCHANT_REVIEW';
 
     /**
+     * @var string
+     */
+    public const FACADE_CUSTOMER = 'FACADE_CUSTOMER';
+
+    /**
+     * @var string
+     */
+    public const FACADE_MERCHANT = 'FACADE_MERCHANT';
+
+    /**
      * @param \Spryker\Zed\Kernel\Container $container
      *
      * @return \Spryker\Zed\Kernel\Container
@@ -49,6 +59,8 @@ class MerchantReviewGuiDependencyProvider extends AbstractBundleDependencyProvid
     {
         $this->addMerchantReviewFacade($container);
         $this->addLocaleFacade($container);
+        $this->addCustomerFacade($container);
+        $this->addMerchantFacade($container);
         $this->addUtilSanitizeService($container);
         $this->addUtilDateTimeService($container);
 
@@ -98,6 +110,30 @@ class MerchantReviewGuiDependencyProvider extends AbstractBundleDependencyProvid
     {
         $container->set(static::FACADE_MERCHANT_REVIEW, function (Container $container) {
             return $container->getLocator()->merchantReview()->facade();
+        });
+    }
+
+    /**
+     * @param \Spryker\Zed\Kernel\Container $container
+     *
+     * @return void
+     */
+    protected function addMerchantFacade(Container $container): void
+    {
+        $container->set(static::FACADE_MERCHANT, function (Container $container) {
+            return $container->getLocator()->merchant()->facade();
+        });
+    }
+
+    /**
+     * @param \Spryker\Zed\Kernel\Container $container
+     *
+     * @return void
+     */
+    protected function addCustomerFacade(Container $container): void
+    {
+        $container->set(static::FACADE_CUSTOMER, function (Container $container) {
+            return $container->getLocator()->customer()->facade();
         });
     }
 

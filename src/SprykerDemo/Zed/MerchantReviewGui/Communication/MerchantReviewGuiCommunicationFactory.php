@@ -10,8 +10,10 @@ namespace SprykerDemo\Zed\MerchantReviewGui\Communication;
 use Generated\Shared\Transfer\LocaleTransfer;
 use Spryker\Service\UtilDateTime\UtilDateTimeServiceInterface;
 use Spryker\Service\UtilSanitize\UtilSanitizeServiceInterface;
+use Spryker\Zed\Customer\Business\CustomerFacadeInterface;
 use Spryker\Zed\Kernel\Communication\AbstractCommunicationFactory;
 use Spryker\Zed\Locale\Business\LocaleFacadeInterface;
+use Spryker\Zed\Merchant\Business\MerchantFacadeInterface;
 use SprykerDemo\Zed\MerchantReview\Business\MerchantReviewFacadeInterface;
 use SprykerDemo\Zed\MerchantReviewGui\Communication\Form\DeleteMerchantReviewForm;
 use SprykerDemo\Zed\MerchantReviewGui\Communication\Form\StatusMerchantReviewForm;
@@ -36,6 +38,8 @@ class MerchantReviewGuiCommunicationFactory extends AbstractCommunicationFactory
             $this->getUtilDateTimeService(),
             $this->getUtilSanitizeServiceInterface(),
             $this->getMerchantReviewFacade(),
+            $this->getCustomerFacade(),
+            $this->getMerchantFacade(),
         );
     }
 
@@ -85,5 +89,21 @@ class MerchantReviewGuiCommunicationFactory extends AbstractCommunicationFactory
     public function getStatusMerchantReviewForm(): FormInterface
     {
         return $this->getFormFactory()->create(StatusMerchantReviewForm::class);
+    }
+
+    /**
+     * @return \Spryker\Zed\Customer\Business\CustomerFacadeInterface
+     */
+    protected function getCustomerFacade(): CustomerFacadeInterface
+    {
+        return $this->getProvidedDependency(MerchantReviewGuiDependencyProvider::FACADE_CUSTOMER);
+    }
+
+    /**
+     * @return \Spryker\Zed\Merchant\Business\MerchantFacadeInterface
+     */
+    protected function getMerchantFacade(): MerchantFacadeInterface
+    {
+        return $this->getProvidedDependency(MerchantReviewGuiDependencyProvider::FACADE_MERCHANT);
     }
 }
