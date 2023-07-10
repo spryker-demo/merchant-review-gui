@@ -42,15 +42,12 @@ class DeleteController extends AbstractController
 
         $idMerchantReview = $this->castId($request->query->get(static::PARAM_ID));
 
-        $merchantSetTransfer = new MerchantReviewTransfer();
-        $merchantSetTransfer->setIdMerchantReview($idMerchantReview);
-
         $this->getFactory()
             ->getMerchantReviewFacade()
-            ->deleteMerchantReview($merchantSetTransfer);
+            ->deleteMerchantReview($idMerchantReview);
 
         $this->addSuccessMessage('Merchant Review #%id% deleted successfully.', [
-            '%id%' => $merchantSetTransfer->getIdMerchantReview(),
+            '%id%' => $idMerchantReview,
         ]);
 
         return $this->redirectResponse(
