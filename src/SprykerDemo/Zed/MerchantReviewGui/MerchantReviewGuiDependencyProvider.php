@@ -10,9 +10,6 @@ namespace SprykerDemo\Zed\MerchantReviewGui;
 use Spryker\Zed\Kernel\AbstractBundleDependencyProvider;
 use Spryker\Zed\Kernel\Container;
 
-/**
- * @method \SprykerDemo\Zed\MerchantReviewGui\MerchantReviewGuiConfig getConfig()
- */
 class MerchantReviewGuiDependencyProvider extends AbstractBundleDependencyProvider
 {
     /**
