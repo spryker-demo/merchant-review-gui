@@ -5,7 +5,7 @@
     "license": "proprietary",
     "require": {
         "php": ">=8.0",
-        "spryker-demo/merchant-review": "*",
+        "spryker-demo/merchant-review": "^1.0.0",
         "spryker/customer": "^7.51.0",
         "spryker/gui": "^3.47.0",
         "spryker/kernel": "^3.70.0",
