@@ -7,7 +7,6 @@
 
 namespace SprykerDemo\Zed\MerchantReviewGui\Communication\Controller;
 
-use Generated\Shared\Transfer\MerchantReviewTransfer;
 use Spryker\Service\UtilText\Model\Url\Url;
 use Spryker\Zed\Kernel\Communication\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
