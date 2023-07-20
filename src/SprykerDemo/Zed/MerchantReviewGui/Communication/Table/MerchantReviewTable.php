@@ -141,7 +141,7 @@ class MerchantReviewTable extends AbstractTable
     /**
      * @param \Spryker\Zed\Gui\Communication\Table\TableConfiguration $config
      *
-     * @return array
+     * @return array<int, array<string, mixed>>
      */
     protected function prepareData(TableConfiguration $config): array
     {
@@ -158,7 +158,7 @@ class MerchantReviewTable extends AbstractTable
     /**
      * @param \Generated\Shared\Transfer\MerchantReviewTransfer $merchantReviewTransfer
      *
-     * @return array
+     * @return array<string, mixed>
      */
     protected function generateItem(MerchantReviewTransfer $merchantReviewTransfer): array
     {
@@ -183,7 +183,13 @@ class MerchantReviewTable extends AbstractTable
      */
     protected function getCreatedAt(MerchantReviewTransfer $merchantReviewTransfer): DateTime|string
     {
-        return $this->utilDateTimeService->formatDateTime($merchantReviewTransfer->getCreatedAt());
+        $createdAt = $merchantReviewTransfer->getCreatedAt();
+
+        if (!$createdAt) {
+            return '';
+        }
+
+        return $this->utilDateTimeService->formatDateTime($createdAt);
     }
 
     /**
@@ -193,9 +199,19 @@ class MerchantReviewTable extends AbstractTable
      */
     protected function getCustomerName(MerchantReviewTransfer $merchantReviewTransfer): string
     {
+        $customerReference = $merchantReviewTransfer->getCustomerReference();
+
+        if (!$customerReference) {
+            return '';
+        }
+
         $customerTransfer = $this->customerFacade
-            ->findCustomerByReference($merchantReviewTransfer->getCustomerReference())
+            ->findCustomerByReference($customerReference)
             ->getCustomerTransfer();
+
+        if (!$customerTransfer) {
+            return '';
+        }
 
         return sprintf(
             '<a href="%s" target="_blank">%s %s</a>',
@@ -203,10 +219,10 @@ class MerchantReviewTable extends AbstractTable
                 'id-customer' => $customerTransfer->getIdCustomer(),
             ]),
             $this->utilSanitizeService->escapeHtml(
-                $customerTransfer->getFirstName(),
+                $customerTransfer->getFirstName() ?? '',
             ),
             $this->utilSanitizeService->escapeHtml(
-                $customerTransfer->getLastName(),
+                $customerTransfer->getLastName() ?? '',
             ),
         );
     }
@@ -224,23 +240,27 @@ class MerchantReviewTable extends AbstractTable
                     ->setIdMerchant($merchantReviewTransfer->getFkMerchant()),
             );
 
+        if (!$merchantTransfer) {
+            return '';
+        }
+
         return sprintf(
             '<a href="%s" target="_blank">%s</a>',
             Url::generate('/merchant-gui/edit-merchant', [
                 'id-merchant' => $merchantReviewTransfer->getFkMerchant(),
             ]),
             $this->utilSanitizeService->escapeHtml(
-                $merchantTransfer->getName(),
+                $merchantTransfer->getName() ?? '',
             ),
         );
     }
 
     /**
-     * @param string $status
+     * @param string|null $status
      *
      * @return string
      */
-    protected function getStatusLabel(string $status): string
+    protected function getStatusLabel(?string $status): string
     {
         return match ($status) {
             MerchantReviewTableConstants::COL_MERCHANT_REVIEW_STATUS_REJECTED => $this->generateLabel(
@@ -369,8 +389,8 @@ class MerchantReviewTable extends AbstractTable
                     <td>%s</td>
                 </tr>
             </table>',
-            $this->utilSanitizeService->escapeHtml($merchantReviewTransfer->getSummary()),
-            $this->utilSanitizeService->escapeHtml($merchantReviewTransfer->getDescription()),
+            $this->utilSanitizeService->escapeHtml($merchantReviewTransfer->getSummary() ?? ''),
+            $this->utilSanitizeService->escapeHtml($merchantReviewTransfer->getDescription() ?? ''),
         );
     }
 }
