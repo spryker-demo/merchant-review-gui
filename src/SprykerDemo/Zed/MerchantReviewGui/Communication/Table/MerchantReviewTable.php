@@ -7,23 +7,25 @@
 
 namespace SprykerDemo\Zed\MerchantReviewGui\Communication\Table;
 
-use DateTime;
 use Generated\Shared\Transfer\LocaleTransfer;
-use Generated\Shared\Transfer\MerchantCriteriaTransfer;
-use Generated\Shared\Transfer\MerchantReviewTransfer;
+use Orm\Zed\MerchantReview\Persistence\SpyMerchantReview;
 use Spryker\Service\UtilDateTime\UtilDateTimeServiceInterface;
 use Spryker\Service\UtilSanitize\UtilSanitizeServiceInterface;
 use Spryker\Service\UtilText\Model\Url\Url;
-use Spryker\Zed\Customer\Business\CustomerFacadeInterface;
 use Spryker\Zed\Gui\Communication\Table\AbstractTable;
 use Spryker\Zed\Gui\Communication\Table\TableConfiguration;
-use Spryker\Zed\Merchant\Business\MerchantFacadeInterface;
-use SprykerDemo\Zed\MerchantReview\Business\MerchantReviewFacadeInterface;
+use Spryker\Zed\MerchantGui\MerchantGuiConfig;
 use SprykerDemo\Zed\MerchantReviewGui\Communication\Form\DeleteMerchantReviewForm;
 use SprykerDemo\Zed\MerchantReviewGui\Communication\Form\StatusMerchantReviewForm;
+use SprykerDemo\Zed\MerchantReviewGui\Persistence\MerchantReviewGuiQueryContainerInterface;
 
 class MerchantReviewTable extends AbstractTable
 {
+    /**
+     * @var \SprykerDemo\Zed\MerchantReviewGui\Persistence\MerchantReviewGuiQueryContainerInterface
+     */
+    protected $merchantReviewGuiQueryContainer;
+
     /**
      * @var \Generated\Shared\Transfer\LocaleTransfer
      */
@@ -40,44 +42,23 @@ class MerchantReviewTable extends AbstractTable
     protected UtilSanitizeServiceInterface $utilSanitizeService;
 
     /**
-     * @var \SprykerDemo\Zed\MerchantReview\Business\MerchantReviewFacadeInterface
-     */
-    protected MerchantReviewFacadeInterface $merchantReviewFacade;
-
-    /**
-     * @var \Spryker\Zed\Customer\Business\CustomerFacadeInterface
-     */
-    protected CustomerFacadeInterface $customerFacade;
-
-    /**
-     * @var \Spryker\Zed\Merchant\Business\MerchantFacadeInterface
-     */
-    protected MerchantFacadeInterface $merchantFacade;
-
-    /**
+     * @param \SprykerDemo\Zed\MerchantReviewGui\Persistence\MerchantReviewGuiQueryContainerInterface $merchantReviewGuiQueryContainer
      * @param \Generated\Shared\Transfer\LocaleTransfer $localeTransfer
      * @param \Spryker\Service\UtilDateTime\UtilDateTimeServiceInterface $utilDateTimeService
      * @param \Spryker\Service\UtilSanitize\UtilSanitizeServiceInterface $utilSanitizeService
-     * @param \SprykerDemo\Zed\MerchantReview\Business\MerchantReviewFacadeInterface $merchantReviewFacade
-     * @param \Spryker\Zed\Customer\Business\CustomerFacadeInterface $customerFacade
-     * @param \Spryker\Zed\Merchant\Business\MerchantFacadeInterface $merchantFacade
      */
     public function __construct(
+        MerchantReviewGuiQueryContainerInterface $merchantReviewGuiQueryContainer,
         LocaleTransfer $localeTransfer,
         UtilDateTimeServiceInterface $utilDateTimeService,
-        UtilSanitizeServiceInterface $utilSanitizeService,
-        MerchantReviewFacadeInterface $merchantReviewFacade,
-        CustomerFacadeInterface $customerFacade,
-        MerchantFacadeInterface $merchantFacade
+        UtilSanitizeServiceInterface $utilSanitizeService
     ) {
+        $this->merchantReviewGuiQueryContainer = $merchantReviewGuiQueryContainer;
         $this->localeTransfer = $localeTransfer;
         $this->utilDateTimeService = $utilDateTimeService;
         $this->utilSanitizeService = $utilSanitizeService;
 
         $this->localeTransfer->requireIdLocale();
-        $this->merchantReviewFacade = $merchantReviewFacade;
-        $this->customerFacade = $customerFacade;
-        $this->merchantFacade = $merchantFacade;
     }
 
     /**
@@ -145,10 +126,12 @@ class MerchantReviewTable extends AbstractTable
      */
     protected function prepareData(TableConfiguration $config): array
     {
-        $merchantReviewCollection = $this->merchantReviewFacade->getMerchantReviews();
+        $query = $this->merchantReviewGuiQueryContainer->queryMerchantReview($this->localeTransfer->getIdLocale());
+
+        $merchantReviewCollection = $this->runQuery($query, $config, true);
 
         $tableData = [];
-        foreach ($merchantReviewCollection->getReviews() as $merchantReviewEntity) {
+        foreach ($merchantReviewCollection as $merchantReviewEntity) {
             $tableData[] = $this->generateItem($merchantReviewEntity);
         }
 
@@ -156,102 +139,66 @@ class MerchantReviewTable extends AbstractTable
     }
 
     /**
-     * @param \Generated\Shared\Transfer\MerchantReviewTransfer $merchantReviewTransfer
+     * @param \Orm\Zed\MerchantReview\Persistence\SpyMerchantReview $merchantReviewEntity
      *
      * @return array<string, mixed>
      */
-    protected function generateItem(MerchantReviewTransfer $merchantReviewTransfer): array
+    protected function generateItem(SpyMerchantReview $merchantReviewEntity): array
     {
         return [
-            MerchantReviewTableConstants::COL_ID_MERCHANT_REVIEW => $merchantReviewTransfer->getIdMerchantReview(),
-            MerchantReviewTableConstants::COL_CREATED => $this->getCreatedAt($merchantReviewTransfer),
-            MerchantReviewTableConstants::COL_CUSTOMER_NAME => $this->getCustomerName($merchantReviewTransfer),
-            MerchantReviewTableConstants::COL_NICK_NAME => $merchantReviewTransfer->getNickname(),
-            MerchantReviewTableConstants::COL_MERCHANT_NAME => $this->getMerchantName($merchantReviewTransfer),
-            MerchantReviewTableConstants::COL_RATING => $merchantReviewTransfer->getRating(),
-            MerchantReviewTableConstants::COL_STATUS => $this->getStatusLabel($merchantReviewTransfer->getStatus()),
-            MerchantReviewTableConstants::COL_ACTIONS => $this->createActionButtons($merchantReviewTransfer),
+            MerchantReviewTableConstants::COL_ID_MERCHANT_REVIEW => $merchantReviewEntity->getIdMerchantReview(),
+            MerchantReviewTableConstants::COL_CREATED => $this->getCreatedAt($merchantReviewEntity),
+            MerchantReviewTableConstants::COL_CUSTOMER_NAME => $this->getCustomerName($merchantReviewEntity),
+            MerchantReviewTableConstants::COL_NICK_NAME => $merchantReviewEntity->getNickname(),
+            MerchantReviewTableConstants::COL_MERCHANT_NAME => $this->getMerchantName($merchantReviewEntity),
+            MerchantReviewTableConstants::COL_RATING => $merchantReviewEntity->getRating(),
+            MerchantReviewTableConstants::COL_STATUS => $this->getStatusLabel($merchantReviewEntity->getStatus()),
+            MerchantReviewTableConstants::COL_ACTIONS => $this->createActionButtons($merchantReviewEntity),
             MerchantReviewTableConstants::COL_SHOW_DETAILS => $this->createShowDetailsButton(),
-            MerchantReviewTableConstants::EXTRA_DETAILS => $this->generateDetails($merchantReviewTransfer),
+            MerchantReviewTableConstants::EXTRA_DETAILS => $this->generateDetails($merchantReviewEntity),
         ];
     }
 
     /**
-     * @param \Generated\Shared\Transfer\MerchantReviewTransfer $merchantReviewTransfer
+     * @param \Orm\Zed\MerchantReview\Persistence\SpyMerchantReview $merchantReviewEntity
      *
      * @return \DateTime|string
      */
-    protected function getCreatedAt(MerchantReviewTransfer $merchantReviewTransfer): DateTime|string
+    protected function getCreatedAt(SpyMerchantReview $merchantReviewEntity)
     {
-        $createdAt = $merchantReviewTransfer->getCreatedAt();
-
-        if (!$createdAt) {
-            return '';
-        }
-
-        return $this->utilDateTimeService->formatDateTime($createdAt);
+        return $this->utilDateTimeService->formatDateTime($merchantReviewEntity->getCreatedAt());
     }
 
     /**
-     * @param \Generated\Shared\Transfer\MerchantReviewTransfer $merchantReviewTransfer
+     * @param \Orm\Zed\MerchantReview\Persistence\SpyMerchantReview $merchantReviewEntity
      *
      * @return string
      */
-    protected function getCustomerName(MerchantReviewTransfer $merchantReviewTransfer): string
+    protected function getCustomerName(SpyMerchantReview $merchantReviewEntity): string
     {
-        $customerReference = $merchantReviewTransfer->getCustomerReference();
-
-        if (!$customerReference) {
-            return '';
-        }
-
-        $customerTransfer = $this->customerFacade
-            ->findCustomerByReference($customerReference)
-            ->getCustomerTransfer();
-
-        if (!$customerTransfer) {
-            return '';
-        }
-
         return sprintf(
             '<a href="%s" target="_blank">%s %s</a>',
             Url::generate('/customer/view', [
-                'id-customer' => $customerTransfer->getIdCustomer(),
+                'id-customer' => $merchantReviewEntity->getVirtualColumn(MerchantReviewTableConstants::COL_MERCHANT_REVIEW_GUI_ID_CUSTOMER),
             ]),
-            $this->utilSanitizeService->escapeHtml(
-                $customerTransfer->getFirstName() ?? '',
-            ),
-            $this->utilSanitizeService->escapeHtml(
-                $customerTransfer->getLastName() ?? '',
-            ),
+            $this->utilSanitizeService->escapeHtml($merchantReviewEntity->getVirtualColumn(MerchantReviewTableConstants::COL_MERCHANT_REVIEW_GUI_FIRST_NAME)),
+            $this->utilSanitizeService->escapeHtml($merchantReviewEntity->getVirtualColumn(MerchantReviewTableConstants::COL_MERCHANT_REVIEW_GUI_LAST_NAME)),
         );
     }
 
     /**
-     * @param \Generated\Shared\Transfer\MerchantReviewTransfer $merchantReviewTransfer
+     * @param \Orm\Zed\MerchantReview\Persistence\SpyMerchantReview $merchantReviewEntity
      *
-     * @return string
+     * @return mixed
      */
-    protected function getMerchantName(MerchantReviewTransfer $merchantReviewTransfer): mixed
+    protected function getMerchantName(SpyMerchantReview $merchantReviewEntity)
     {
-        $merchantTransfer = $this->merchantFacade
-            ->findOne(
-                (new MerchantCriteriaTransfer())
-                    ->setIdMerchant($merchantReviewTransfer->getFkMerchant()),
-            );
-
-        if (!$merchantTransfer) {
-            return '';
-        }
-
         return sprintf(
             '<a href="%s" target="_blank">%s</a>',
             Url::generate('/merchant-gui/edit-merchant', [
-                'id-merchant' => $merchantReviewTransfer->getFkMerchant(),
+                'id-merchant' => $merchantReviewEntity->getFkMerchant(),
             ]),
-            $this->utilSanitizeService->escapeHtml(
-                $merchantTransfer->getName() ?? '',
-            ),
+            $this->utilSanitizeService->escapeHtml($merchantReviewEntity->getVirtualColumn(MerchantReviewTableConstants::COL_MERCHANT_NAME)),
         );
     }
 
@@ -276,18 +223,18 @@ class MerchantReviewTable extends AbstractTable
     }
 
     /**
-     * @param \Generated\Shared\Transfer\MerchantReviewTransfer $merchantReviewTransfer
+     * @param \Orm\Zed\MerchantReview\Persistence\SpyMerchantReview $merchantReviewEntity
      *
      * @return string
      */
-    protected function createActionButtons(MerchantReviewTransfer $merchantReviewTransfer): string
+    protected function createActionButtons(SpyMerchantReview $merchantReviewEntity): string
     {
         $actions = [];
 
-        $actions[] = $this->generateStatusChangeButton($merchantReviewTransfer);
+        $actions[] = $this->generateStatusChangeButton($merchantReviewEntity);
         $actions[] = $this->generateRemoveButton(
             Url::generate('/merchant-review-gui/delete', [
-                MerchantReviewTableConstants::PARAM_ID => $merchantReviewTransfer->getIdMerchantReview(),
+                MerchantReviewTableConstants::PARAM_ID => $merchantReviewEntity->getIdMerchantReview(),
             ]),
             'Delete',
             [],
@@ -298,26 +245,26 @@ class MerchantReviewTable extends AbstractTable
     }
 
     /**
-     * @param \Generated\Shared\Transfer\MerchantReviewTransfer $merchantReviewTransfer
+     * @param \Orm\Zed\MerchantReview\Persistence\SpyMerchantReview $merchantReviewEntity
      *
      * @return string
      */
-    protected function generateStatusChangeButton(MerchantReviewTransfer $merchantReviewTransfer): string
+    protected function generateStatusChangeButton(SpyMerchantReview $merchantReviewEntity): string
     {
         $buttons = [];
-        switch ($merchantReviewTransfer->getStatus()) {
+        switch ($merchantReviewEntity->getStatus()) {
             case MerchantReviewTableConstants::COL_MERCHANT_REVIEW_STATUS_REJECTED:
-                $buttons[] = $this->generateApproveButton($merchantReviewTransfer);
+                $buttons[] = $this->generateApproveButton($merchantReviewEntity);
 
                 break;
             case MerchantReviewTableConstants::COL_MERCHANT_REVIEW_STATUS_APPROVED:
-                $buttons[] = $this->generateRejectButton($merchantReviewTransfer);
+                $buttons[] = $this->generateRejectButton($merchantReviewEntity);
 
                 break;
             case MerchantReviewTableConstants::COL_MERCHANT_REVIEW_STATUS_PENDING:
             default:
-                $buttons[] = $this->generateApproveButton($merchantReviewTransfer);
-                $buttons[] = $this->generateRejectButton($merchantReviewTransfer);
+                $buttons[] = $this->generateApproveButton($merchantReviewEntity);
+                $buttons[] = $this->generateRejectButton($merchantReviewEntity);
 
                 break;
         }
@@ -326,15 +273,16 @@ class MerchantReviewTable extends AbstractTable
     }
 
     /**
-     * @param \Generated\Shared\Transfer\MerchantReviewTransfer $merchantReviewTransfer
+     * @param \Orm\Zed\MerchantReview\Persistence\SpyMerchantReview $merchantReviewEntity
      *
      * @return string
      */
-    protected function generateApproveButton(MerchantReviewTransfer $merchantReviewTransfer): string
+    protected function generateApproveButton(SpyMerchantReview $merchantReviewEntity): string
     {
         return $this->generateFormButton(
-            Url::generate('/merchant-review-gui/update/approve', [
-                MerchantReviewTableConstants::PARAM_ID => $merchantReviewTransfer->getIdMerchantReview(),
+            Url::generate('/merchant-review-gui/review-status', [
+                MerchantReviewTableConstants::PARAM_ID => $merchantReviewEntity->getIdMerchantReview(),
+                MerchantReviewTableConstants::PARAM_STATUS => MerchantReviewTableConstants::COL_MERCHANT_REVIEW_STATUS_APPROVED,
             ]),
             'Approve',
             StatusMerchantReviewForm::class,
@@ -345,15 +293,16 @@ class MerchantReviewTable extends AbstractTable
     }
 
     /**
-     * @param \Generated\Shared\Transfer\MerchantReviewTransfer $merchantReviewTransfer
+     * @param \Orm\Zed\MerchantReview\Persistence\SpyMerchantReview $merchantReviewEntity
      *
      * @return string
      */
-    protected function generateRejectButton(MerchantReviewTransfer $merchantReviewTransfer): string
+    protected function generateRejectButton(SpyMerchantReview $merchantReviewEntity): string
     {
         return $this->generateFormButton(
-            Url::generate('/merchant-review-gui/update/reject', [
-                MerchantReviewTableConstants::PARAM_ID => $merchantReviewTransfer->getIdMerchantReview(),
+            Url::generate('/merchant-review-gui/review-status', [
+                MerchantReviewTableConstants::PARAM_ID => $merchantReviewEntity->getIdMerchantReview(),
+                MerchantReviewTableConstants::PARAM_STATUS => MerchantReviewTableConstants::COL_MERCHANT_REVIEW_STATUS_REJECTED,
             ]),
             'Reject',
             StatusMerchantReviewForm::class,
@@ -372,11 +321,11 @@ class MerchantReviewTable extends AbstractTable
     }
 
     /**
-     * @param \Generated\Shared\Transfer\MerchantReviewTransfer $merchantReviewTransfer
+     * @param \Orm\Zed\MerchantReview\Persistence\SpyMerchantReview $merchantReviewEntity
      *
      * @return string
      */
-    protected function generateDetails(MerchantReviewTransfer $merchantReviewTransfer): string
+    protected function generateDetails(SpyMerchantReview $merchantReviewEntity): string
     {
         return sprintf(
             '<table class="details">
@@ -389,8 +338,8 @@ class MerchantReviewTable extends AbstractTable
                     <td>%s</td>
                 </tr>
             </table>',
-            $this->utilSanitizeService->escapeHtml($merchantReviewTransfer->getSummary() ?? ''),
-            $this->utilSanitizeService->escapeHtml($merchantReviewTransfer->getDescription() ?? ''),
+            $this->utilSanitizeService->escapeHtml($merchantReviewEntity->getSummary()),
+            $this->utilSanitizeService->escapeHtml($merchantReviewEntity->getDescription()),
         );
     }
 }

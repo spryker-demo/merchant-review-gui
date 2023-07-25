@@ -67,6 +67,18 @@ class MerchantReviewGuiDependencyProvider extends AbstractBundleDependencyProvid
     /**
      * @param \Spryker\Zed\Kernel\Container $container
      *
+     * @return \Spryker\Zed\Kernel\Container
+     */
+    public function providePersistenceLayerDependencies(Container $container): Container
+    {
+        $this->addMerchantReviewQueryContainer($container);
+
+        return $container;
+    }
+
+    /**
+     * @param \Spryker\Zed\Kernel\Container $container
+     *
      * @return void
      */
     protected function addUtilSanitizeService(Container $container): void
@@ -86,16 +98,6 @@ class MerchantReviewGuiDependencyProvider extends AbstractBundleDependencyProvid
         $container->set(static::SERVICE_UTIL_DATE_TIME, function (Container $container) {
             return $container->getLocator()->utilDateTime()->service();
         });
-    }
-
-    /**
-     * @param \Spryker\Zed\Kernel\Container $container
-     *
-     * @return \Spryker\Zed\Kernel\Container
-     */
-    public function providePersistenceLayerDependencies(Container $container): Container
-    {
-        return $container;
     }
 
     /**
@@ -143,6 +145,18 @@ class MerchantReviewGuiDependencyProvider extends AbstractBundleDependencyProvid
     {
         $container->set(static::FACADE_LOCALE, function (Container $container) {
             return $container->getLocator()->locale()->facade();
+        });
+    }
+
+    /**
+     * @param \Spryker\Zed\Kernel\Container $container
+     *
+     * @return void
+     */
+    protected function addMerchantReviewQueryContainer(Container $container): void
+    {
+        $container->set(static::QUERY_CONTAINER_MERCHANT_REVIEW, function (Container $container) {
+            return $container->getLocator()->merchantReview()->queryContainer();
         });
     }
 }

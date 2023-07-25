@@ -20,7 +20,7 @@ class DeleteController extends AbstractController
     /**
      * @var string
      */
-    public const PARAM_ID = 'id';
+    public const PARAM_MERCHANT_REVIEW_ID = 'id-merchant-review';
 
     /**
      * @param \Symfony\Component\HttpFoundation\Request $request
@@ -39,7 +39,7 @@ class DeleteController extends AbstractController
             );
         }
 
-        $idMerchantReview = $this->castId($request->query->get(static::PARAM_ID));
+        $idMerchantReview = $this->castId($request->query->get(static::PARAM_MERCHANT_REVIEW_ID));
 
         $this->getFactory()
             ->getMerchantReviewFacade()
