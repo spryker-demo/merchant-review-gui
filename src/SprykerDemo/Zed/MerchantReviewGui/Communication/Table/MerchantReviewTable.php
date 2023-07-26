@@ -16,14 +16,14 @@ use Spryker\Zed\Gui\Communication\Table\AbstractTable;
 use Spryker\Zed\Gui\Communication\Table\TableConfiguration;
 use SprykerDemo\Zed\MerchantReviewGui\Communication\Form\DeleteMerchantReviewForm;
 use SprykerDemo\Zed\MerchantReviewGui\Communication\Form\StatusMerchantReviewForm;
-use SprykerDemo\Zed\MerchantReviewGui\Persistence\MerchantReviewGuiQueryContainerInterface;
+use SprykerDemo\Zed\MerchantReviewGui\Persistence\MerchantReviewGuiRepositoryInterface;
 
 class MerchantReviewTable extends AbstractTable
 {
     /**
-     * @var \SprykerDemo\Zed\MerchantReviewGui\Persistence\MerchantReviewGuiQueryContainerInterface
+     * @var \SprykerDemo\Zed\MerchantReviewGui\Persistence\MerchantReviewGuiRepositoryInterface
      */
-    protected $merchantReviewGuiQueryContainer;
+    protected $merchantReviewGuiPersistenceRepository;
 
     /**
      * @var \Generated\Shared\Transfer\LocaleTransfer
@@ -41,18 +41,18 @@ class MerchantReviewTable extends AbstractTable
     protected UtilSanitizeServiceInterface $utilSanitizeService;
 
     /**
-     * @param \SprykerDemo\Zed\MerchantReviewGui\Persistence\MerchantReviewGuiQueryContainerInterface $merchantReviewGuiQueryContainer
+     * @param \SprykerDemo\Zed\MerchantReviewGui\Persistence\MerchantReviewGuiRepositoryInterface $merchantReviewGuiPersistenceRepository
      * @param \Generated\Shared\Transfer\LocaleTransfer $localeTransfer
      * @param \Spryker\Service\UtilDateTime\UtilDateTimeServiceInterface $utilDateTimeService
      * @param \Spryker\Service\UtilSanitize\UtilSanitizeServiceInterface $utilSanitizeService
      */
     public function __construct(
-        MerchantReviewGuiQueryContainerInterface $merchantReviewGuiQueryContainer,
+        MerchantReviewGuiRepositoryInterface $merchantReviewGuiPersistenceRepository,
         LocaleTransfer $localeTransfer,
         UtilDateTimeServiceInterface $utilDateTimeService,
         UtilSanitizeServiceInterface $utilSanitizeService
     ) {
-        $this->merchantReviewGuiQueryContainer = $merchantReviewGuiQueryContainer;
+        $this->merchantReviewGuiPersistenceRepository = $merchantReviewGuiPersistenceRepository;
         $this->localeTransfer = $localeTransfer;
         $this->utilDateTimeService = $utilDateTimeService;
         $this->utilSanitizeService = $utilSanitizeService;
@@ -125,7 +125,7 @@ class MerchantReviewTable extends AbstractTable
      */
     protected function prepareData(TableConfiguration $config): array
     {
-        $query = $this->merchantReviewGuiQueryContainer->queryMerchantReview($this->localeTransfer->getIdLocale());
+        $query = $this->merchantReviewGuiPersistenceRepository->getMerchantReviewQuery($this->localeTransfer->getIdLocale());
 
         $merchantReviewCollection = $this->runQuery($query, $config, true);
 

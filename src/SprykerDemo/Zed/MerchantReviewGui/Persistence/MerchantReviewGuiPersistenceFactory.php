@@ -7,20 +7,17 @@
 
 namespace SprykerDemo\Zed\MerchantReviewGui\Persistence;
 
+use Orm\Zed\MerchantReview\Persistence\SpyMerchantReviewQuery;
 use Spryker\Zed\Kernel\Persistence\AbstractPersistenceFactory;
-use SprykerDemo\Zed\MerchantReview\Persistence\MerchantReviewQueryContainerInterface;
 use SprykerDemo\Zed\MerchantReviewGui\MerchantReviewGuiDependencyProvider;
 
-/**
- * @method \SprykerDemo\Zed\MerchantReviewGui\Persistence\MerchantReviewGuiQueryContainerInterface getQueryContainer()
- */
 class MerchantReviewGuiPersistenceFactory extends AbstractPersistenceFactory
 {
     /**
-     * @return \SprykerDemo\Zed\MerchantReview\Persistence\MerchantReviewQueryContainerInterface
+     * @return \Orm\Zed\MerchantReview\Persistence\SpyMerchantReviewQuery
      */
-    public function getMerchantReviewQueryContainer(): MerchantReviewQueryContainerInterface
+    public function getMerchantReviewQuery(): SpyMerchantReviewQuery
     {
-        return $this->getProvidedDependency(MerchantReviewGuiDependencyProvider::QUERY_CONTAINER_MERCHANT_REVIEW);
+        return $this->getProvidedDependency(MerchantReviewGuiDependencyProvider::PROPEL_MERCHANT_REVIEW_QUERY);
     }
 }

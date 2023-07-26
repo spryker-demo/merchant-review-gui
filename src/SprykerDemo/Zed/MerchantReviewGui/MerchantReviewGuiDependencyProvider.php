@@ -7,6 +7,7 @@
 
 namespace SprykerDemo\Zed\MerchantReviewGui;
 
+use Orm\Zed\MerchantReview\Persistence\SpyMerchantReviewQuery;
 use Spryker\Zed\Kernel\AbstractBundleDependencyProvider;
 use Spryker\Zed\Kernel\Container;
 
@@ -35,7 +36,7 @@ class MerchantReviewGuiDependencyProvider extends AbstractBundleDependencyProvid
     /**
      * @var string
      */
-    public const QUERY_CONTAINER_MERCHANT_REVIEW = 'QUERY_CONTAINER_MERCHANT_REVIEW';
+    public const PROPEL_MERCHANT_REVIEW_QUERY = 'PROPEL_MERCHANT_REVIEW_QUERY';
 
     /**
      * @var string
@@ -71,7 +72,7 @@ class MerchantReviewGuiDependencyProvider extends AbstractBundleDependencyProvid
      */
     public function providePersistenceLayerDependencies(Container $container): Container
     {
-        $this->addMerchantReviewQueryContainer($container);
+        $this->addMerchantReviewQuery($container);
 
         return $container;
     }
@@ -153,10 +154,10 @@ class MerchantReviewGuiDependencyProvider extends AbstractBundleDependencyProvid
      *
      * @return void
      */
-    protected function addMerchantReviewQueryContainer(Container $container): void
+    protected function addMerchantReviewQuery(Container $container): void
     {
-        $container->set(static::QUERY_CONTAINER_MERCHANT_REVIEW, function (Container $container) {
-            return $container->getLocator()->merchantReview()->queryContainer();
+        $container->set(static::PROPEL_MERCHANT_REVIEW_QUERY, function () {
+            return SpyMerchantReviewQuery::create();
         });
     }
 }

@@ -9,17 +9,12 @@ namespace SprykerDemo\Zed\MerchantReviewGui\Persistence;
 
 use Orm\Zed\MerchantReview\Persistence\SpyMerchantReviewQuery;
 
-interface MerchantReviewGuiQueryContainerInterface
+interface MerchantReviewGuiRepositoryInterface
 {
     /**
-     * Specification:
-     * - TODO: Add method specification.
-     *
-     * @api
-     *
      * @param int $idLocale
      *
      * @return \Orm\Zed\MerchantReview\Persistence\SpyMerchantReviewQuery
      */
-    public function queryMerchantReview(int $idLocale): SpyMerchantReviewQuery;
+    public function getMerchantReviewQuery(int $idLocale): SpyMerchantReviewQuery;
 }

@@ -22,7 +22,7 @@ use SprykerDemo\Zed\MerchantReviewGui\MerchantReviewGuiDependencyProvider;
 use Symfony\Component\Form\FormInterface;
 
 /**
- * @method \SprykerDemo\Zed\MerchantReviewGui\Persistence\MerchantReviewGuiQueryContainerInterface getQueryContainer()
+ * @method \SprykerDemo\Zed\MerchantReviewGui\Persistence\MerchantReviewGuiRepositoryInterface getRepository()()
  */
 class MerchantReviewGuiCommunicationFactory extends AbstractCommunicationFactory
 {
@@ -34,7 +34,7 @@ class MerchantReviewGuiCommunicationFactory extends AbstractCommunicationFactory
     public function createMerchantReviewTable(LocaleTransfer $localeTransfer): MerchantReviewTable
     {
         return new MerchantReviewTable(
-            $this->getQueryContainer(),
+            $this->getRepository(),
             $localeTransfer,
             $this->getUtilDateTimeService(),
             $this->getUtilSanitizeServiceInterface(),

@@ -11,12 +11,12 @@ use Orm\Zed\Customer\Persistence\Map\SpyCustomerTableMap;
 use Orm\Zed\Merchant\Persistence\Map\SpyMerchantTableMap;
 use Orm\Zed\MerchantReview\Persistence\Map\SpyMerchantReviewTableMap;
 use Orm\Zed\MerchantReview\Persistence\SpyMerchantReviewQuery;
-use Spryker\Zed\Kernel\Persistence\AbstractQueryContainer;
+use Spryker\Zed\Kernel\Persistence\AbstractRepository;
 
 /**
  * @method \SprykerDemo\Zed\MerchantReviewGui\Persistence\MerchantReviewGuiPersistenceFactory getFactory()
  */
-class MerchantReviewGuiQueryContainer extends AbstractQueryContainer implements MerchantReviewGuiQueryContainerInterface
+class MerchantReviewGuiRepository extends AbstractRepository implements MerchantReviewGuiRepositoryInterface
 {
     /**
      * @var string
@@ -44,19 +44,15 @@ class MerchantReviewGuiQueryContainer extends AbstractQueryContainer implements 
     public const FIELD_CREATED = 'created';
 
     /**
-     * {@inheritDoc}
-     *
-     * @api
-     *
      * @param int $idLocale
      *
      * @return \Orm\Zed\MerchantReview\Persistence\SpyMerchantReviewQuery
      */
-    public function queryMerchantReview(int $idLocale): SpyMerchantReviewQuery
+    public function getMerchantReviewQuery(int $idLocale): SpyMerchantReviewQuery
     {
         return $this->getFactory()
-            ->getMerchantReviewQueryContainer()
-            ->queryMerchantReview()
+            ->getMerchantReviewQuery()
+            ->filterByFkLocale($idLocale)
             ->addJoin(SpyMerchantReviewTableMap::COL_CUSTOMER_REFERENCE, SpyCustomerTableMap::COL_CUSTOMER_REFERENCE)
             ->addJoin(SpyMerchantReviewTableMap::COL_FK_MERCHANT, SpyMerchantTableMap::COL_ID_MERCHANT)
             ->withColumn(SpyMerchantReviewTableMap::COL_CREATED_AT, static::FIELD_CREATED)
