@@ -21,11 +21,6 @@ class MerchantReviewGuiDependencyProvider extends AbstractBundleDependencyProvid
     /**
      * @var string
      */
-    public const FACADE_LOCALE = 'FACADE_LOCALE';
-
-    /**
-     * @var string
-     */
     public const SERVICE_UTIL_SANITIZE = 'SERVICE_UTIL_SANITIZE';
 
     /**
@@ -56,7 +51,6 @@ class MerchantReviewGuiDependencyProvider extends AbstractBundleDependencyProvid
     public function provideCommunicationLayerDependencies(Container $container): Container
     {
         $this->addMerchantReviewFacade($container);
-        $this->addLocaleFacade($container);
         $this->addCustomerFacade($container);
         $this->addMerchantFacade($container);
         $this->addUtilSanitizeService($container);
@@ -134,18 +128,6 @@ class MerchantReviewGuiDependencyProvider extends AbstractBundleDependencyProvid
     {
         $container->set(static::FACADE_CUSTOMER, function (Container $container) {
             return $container->getLocator()->customer()->facade();
-        });
-    }
-
-    /**
-     * @param \Spryker\Zed\Kernel\Container $container
-     *
-     * @return void
-     */
-    protected function addLocaleFacade(Container $container): void
-    {
-        $container->set(static::FACADE_LOCALE, function (Container $container) {
-            return $container->getLocator()->locale()->facade();
         });
     }
 

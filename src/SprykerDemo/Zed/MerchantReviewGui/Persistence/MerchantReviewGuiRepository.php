@@ -44,15 +44,12 @@ class MerchantReviewGuiRepository extends AbstractRepository implements Merchant
     public const FIELD_CREATED = 'created';
 
     /**
-     * @param int $idLocale
-     *
      * @return \Orm\Zed\MerchantReview\Persistence\SpyMerchantReviewQuery
      */
-    public function getMerchantReviewQuery(int $idLocale): SpyMerchantReviewQuery
+    public function getMerchantReviewQuery(): SpyMerchantReviewQuery
     {
         return $this->getFactory()
             ->getMerchantReviewQuery()
-            ->filterByFkLocale($idLocale)
             ->addJoin(SpyMerchantReviewTableMap::COL_CUSTOMER_REFERENCE, SpyCustomerTableMap::COL_CUSTOMER_REFERENCE)
             ->addJoin(SpyMerchantReviewTableMap::COL_FK_MERCHANT, SpyMerchantTableMap::COL_ID_MERCHANT)
             ->withColumn(SpyMerchantReviewTableMap::COL_CREATED_AT, static::FIELD_CREATED)

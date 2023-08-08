@@ -12,9 +12,7 @@ use Orm\Zed\MerchantReview\Persistence\SpyMerchantReviewQuery;
 interface MerchantReviewGuiRepositoryInterface
 {
     /**
-     * @param int $idLocale
-     *
      * @return \Orm\Zed\MerchantReview\Persistence\SpyMerchantReviewQuery
      */
-    public function getMerchantReviewQuery(int $idLocale): SpyMerchantReviewQuery;
+    public function getMerchantReviewQuery(): SpyMerchantReviewQuery;
 }

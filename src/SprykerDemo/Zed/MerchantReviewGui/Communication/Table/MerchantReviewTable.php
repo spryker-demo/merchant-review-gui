@@ -7,7 +7,6 @@
 
 namespace SprykerDemo\Zed\MerchantReviewGui\Communication\Table;
 
-use Generated\Shared\Transfer\LocaleTransfer;
 use Orm\Zed\MerchantReview\Persistence\SpyMerchantReview;
 use Spryker\Service\UtilDateTime\UtilDateTimeServiceInterface;
 use Spryker\Service\UtilSanitize\UtilSanitizeServiceInterface;
@@ -26,11 +25,6 @@ class MerchantReviewTable extends AbstractTable
     protected $merchantReviewGuiPersistenceRepository;
 
     /**
-     * @var \Generated\Shared\Transfer\LocaleTransfer
-     */
-    protected LocaleTransfer $localeTransfer;
-
-    /**
      * @var \Spryker\Service\UtilDateTime\UtilDateTimeServiceInterface
      */
     protected UtilDateTimeServiceInterface $utilDateTimeService;
@@ -42,22 +36,17 @@ class MerchantReviewTable extends AbstractTable
 
     /**
      * @param \SprykerDemo\Zed\MerchantReviewGui\Persistence\MerchantReviewGuiRepositoryInterface $merchantReviewGuiPersistenceRepository
-     * @param \Generated\Shared\Transfer\LocaleTransfer $localeTransfer
      * @param \Spryker\Service\UtilDateTime\UtilDateTimeServiceInterface $utilDateTimeService
      * @param \Spryker\Service\UtilSanitize\UtilSanitizeServiceInterface $utilSanitizeService
      */
     public function __construct(
         MerchantReviewGuiRepositoryInterface $merchantReviewGuiPersistenceRepository,
-        LocaleTransfer $localeTransfer,
         UtilDateTimeServiceInterface $utilDateTimeService,
         UtilSanitizeServiceInterface $utilSanitizeService
     ) {
         $this->merchantReviewGuiPersistenceRepository = $merchantReviewGuiPersistenceRepository;
-        $this->localeTransfer = $localeTransfer;
         $this->utilDateTimeService = $utilDateTimeService;
         $this->utilSanitizeService = $utilSanitizeService;
-
-        $this->localeTransfer->requireIdLocale();
     }
 
     /**
@@ -125,7 +114,7 @@ class MerchantReviewTable extends AbstractTable
      */
     protected function prepareData(TableConfiguration $config): array
     {
-        $query = $this->merchantReviewGuiPersistenceRepository->getMerchantReviewQuery($this->localeTransfer->getIdLocale());
+        $query = $this->merchantReviewGuiPersistenceRepository->getMerchantReviewQuery();
 
         $merchantReviewCollection = $this->runQuery($query, $config, true);
 

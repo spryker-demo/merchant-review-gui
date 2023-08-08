@@ -7,12 +7,10 @@
 
 namespace SprykerDemo\Zed\MerchantReviewGui\Communication;
 
-use Generated\Shared\Transfer\LocaleTransfer;
 use Spryker\Service\UtilDateTime\UtilDateTimeServiceInterface;
 use Spryker\Service\UtilSanitize\UtilSanitizeServiceInterface;
 use Spryker\Zed\Customer\Business\CustomerFacadeInterface;
 use Spryker\Zed\Kernel\Communication\AbstractCommunicationFactory;
-use Spryker\Zed\Locale\Business\LocaleFacadeInterface;
 use Spryker\Zed\Merchant\Business\MerchantFacadeInterface;
 use SprykerDemo\Zed\MerchantReview\Business\MerchantReviewFacadeInterface;
 use SprykerDemo\Zed\MerchantReviewGui\Communication\Form\DeleteMerchantReviewForm;
@@ -27,15 +25,12 @@ use Symfony\Component\Form\FormInterface;
 class MerchantReviewGuiCommunicationFactory extends AbstractCommunicationFactory
 {
     /**
-     * @param \Generated\Shared\Transfer\LocaleTransfer $localeTransfer
-     *
      * @return \SprykerDemo\Zed\MerchantReviewGui\Communication\Table\MerchantReviewTable
      */
-    public function createMerchantReviewTable(LocaleTransfer $localeTransfer): MerchantReviewTable
+    public function createMerchantReviewTable(): MerchantReviewTable
     {
         return new MerchantReviewTable(
             $this->getRepository(),
-            $localeTransfer,
             $this->getUtilDateTimeService(),
             $this->getUtilSanitizeServiceInterface(),
         );
@@ -71,14 +66,6 @@ class MerchantReviewGuiCommunicationFactory extends AbstractCommunicationFactory
     public function getMerchantReviewFacade(): MerchantReviewFacadeInterface
     {
         return $this->getProvidedDependency(MerchantReviewGuiDependencyProvider::FACADE_MERCHANT_REVIEW);
-    }
-
-    /**
-     * @return \Spryker\Zed\Locale\Business\LocaleFacadeInterface
-     */
-    public function getLocaleFacade(): LocaleFacadeInterface
-    {
-        return $this->getProvidedDependency(MerchantReviewGuiDependencyProvider::FACADE_LOCALE);
     }
 
     /**

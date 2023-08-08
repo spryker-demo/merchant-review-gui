@@ -7,7 +7,6 @@
 
 namespace SprykerDemo\Zed\MerchantReviewGui\Communication\Controller;
 
-use Generated\Shared\Transfer\LocaleTransfer;
 use Spryker\Zed\Kernel\Communication\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
@@ -23,7 +22,7 @@ class IndexController extends AbstractController
     {
         $merchantReviewTable = $this
             ->getFactory()
-            ->createMerchantReviewTable($this->getCurrentLocale());
+            ->createMerchantReviewTable();
 
         return $this->viewResponse([
             'merchantReviewTable' => $merchantReviewTable->render(),
@@ -37,20 +36,10 @@ class IndexController extends AbstractController
     {
         $merchantTable = $this
             ->getFactory()
-            ->createMerchantReviewTable($this->getCurrentLocale());
+            ->createMerchantReviewTable();
 
         return $this->jsonResponse(
             $merchantTable->fetchData(),
         );
-    }
-
-    /**
-     * @return \Generated\Shared\Transfer\LocaleTransfer
-     */
-    protected function getCurrentLocale(): LocaleTransfer
-    {
-        return $this->getFactory()
-            ->getLocaleFacade()
-            ->getCurrentLocale();
     }
 }
