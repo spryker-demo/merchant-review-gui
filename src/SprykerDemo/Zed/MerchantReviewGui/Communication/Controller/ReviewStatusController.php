@@ -97,6 +97,6 @@ class ReviewStatusController extends AbstractController
     {
         $this->addErrorMessage(static::MESSAGE_ERROR_MERCHANT_REVIEW_STATUS_UPDATE);
 
-        return $this->redirectResponse($request->headers->get('referer', static::URL_REDIRECT_MERCHANT_REVIEW_LIST));
+        return $this->redirectResponse($request->headers->get('referer') ?? static::URL_REDIRECT_MERCHANT_REVIEW_LIST);
     }
 }

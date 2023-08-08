@@ -150,11 +150,11 @@ class MerchantReviewTable extends AbstractTable
     /**
      * @param \Orm\Zed\MerchantReview\Persistence\SpyMerchantReview $merchantReviewEntity
      *
-     * @return \DateTime|string
+     * @return string
      */
-    protected function getCreatedAt(SpyMerchantReview $merchantReviewEntity)
+    protected function getCreatedAt(SpyMerchantReview $merchantReviewEntity): string
     {
-        return $this->utilDateTimeService->formatDateTime($merchantReviewEntity->getCreatedAt());
+        return $merchantReviewEntity->getCreatedAt() ? $this->utilDateTimeService->formatDateTime($merchantReviewEntity->getCreatedAt()) : '';
     }
 
     /**
@@ -326,8 +326,8 @@ class MerchantReviewTable extends AbstractTable
                     <td>%s</td>
                 </tr>
             </table>',
-            $this->utilSanitizeService->escapeHtml($merchantReviewEntity->getSummary()),
-            $this->utilSanitizeService->escapeHtml($merchantReviewEntity->getDescription()),
+            $merchantReviewEntity->getSummary() ? $this->utilSanitizeService->escapeHtml($merchantReviewEntity->getSummary()) : '',
+            $merchantReviewEntity->getDescription() ? $this->utilSanitizeService->escapeHtml($merchantReviewEntity->getDescription()) : '',
         );
     }
 }
