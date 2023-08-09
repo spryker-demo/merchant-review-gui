@@ -22,7 +22,7 @@ class MerchantReviewTable extends AbstractTable
     /**
      * @var \SprykerDemo\Zed\MerchantReviewGui\Persistence\MerchantReviewGuiRepositoryInterface
      */
-    protected $merchantReviewGuiPersistenceRepository;
+    protected MerchantReviewGuiRepositoryInterface $merchantReviewGuiPersistenceRepository;
 
     /**
      * @var \Spryker\Service\UtilDateTime\UtilDateTimeServiceInterface

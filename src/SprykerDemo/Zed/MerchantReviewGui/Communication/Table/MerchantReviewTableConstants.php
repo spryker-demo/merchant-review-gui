@@ -23,10 +23,19 @@ interface MerchantReviewTableConstants
      */
     public const TABLE_IDENTIFIER = 'merchant-review-table';
 
+    /**
+     * @var string
+     */
     public const SORT_DESC = TableConfiguration::SORT_DESC;
 
+    /**
+     * @var string
+     */
     public const PARAM_ID = ReviewStatusController::PARAM_MERCHANT_REVIEW_ID;
 
+    /**
+     * @var string
+     */
     public const PARAM_STATUS = ReviewStatusController::PARAM_MERCHANT_REVIEW_STATUS;
 
     /**
