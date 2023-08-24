@@ -14,6 +14,7 @@ use Orm\Zed\MerchantReview\Persistence\SpyMerchantReviewQuery;
 use Spryker\Zed\Kernel\Persistence\AbstractRepository;
 
 /**
+ *
  * @method \SprykerDemo\Zed\MerchantReviewGui\Persistence\MerchantReviewGuiPersistenceFactory getFactory()
  */
 class MerchantReviewGuiRepository extends AbstractRepository implements MerchantReviewGuiRepositoryInterface
@@ -21,29 +22,32 @@ class MerchantReviewGuiRepository extends AbstractRepository implements Merchant
     /**
      * @var string
      */
-    public const FIELD_MERCHANT_NAME = 'merchant_name';
+    protected const FIELD_CUSTOMER_FIRST_NAME = 'first_name';
 
     /**
      * @var string
      */
-    public const FIELD_ID_CUSTOMER = 'id_customer';
+    protected const FIELD_CUSTOMER_LAST_NAME = 'last_name';
 
     /**
      * @var string
      */
-    public const FIELD_CUSTOMER_FIRST_NAME = 'first_name';
+    protected const FIELD_CREATED = 'created';
 
     /**
      * @var string
      */
-    public const FIELD_CUSTOMER_LAST_NAME = 'last_name';
+    protected const FIELD_MERCHANT_NAME = 'merchant_name';
 
     /**
      * @var string
      */
-    public const FIELD_CREATED = 'created';
+    protected const FIELD_ID_CUSTOMER = 'id_customer';
 
     /**
+     * @module Customer
+     * @module Merchant
+     *
      * @return \Orm\Zed\MerchantReview\Persistence\SpyMerchantReviewQuery
      */
     public function getMerchantReviewQuery(): SpyMerchantReviewQuery

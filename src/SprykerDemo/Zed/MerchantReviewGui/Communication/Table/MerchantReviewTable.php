@@ -76,7 +76,7 @@ class MerchantReviewTable extends AbstractTable
             MerchantReviewTableConstants::COL_ACTIONS,
             MerchantReviewTableConstants::COL_CUSTOMER_NAME,
             MerchantReviewTableConstants::COL_MERCHANT_NAME,
-            MerchantReviewTableConstants::EXTRA_DETAILS,
+            MerchantReviewTableConstants::COL_EXTRA_DETAILS,
         ]);
 
         $config->setSearchable([
@@ -95,7 +95,7 @@ class MerchantReviewTable extends AbstractTable
         ]);
 
         $config->setExtraColumns([
-            MerchantReviewTableConstants::EXTRA_DETAILS,
+            MerchantReviewTableConstants::COL_EXTRA_DETAILS,
         ]);
 
         $config->setDefaultSortField(
@@ -143,7 +143,7 @@ class MerchantReviewTable extends AbstractTable
             MerchantReviewTableConstants::COL_STATUS => $this->getStatusLabel($merchantReviewEntity->getStatus()),
             MerchantReviewTableConstants::COL_ACTIONS => $this->createActionButtons($merchantReviewEntity),
             MerchantReviewTableConstants::COL_SHOW_DETAILS => $this->createShowDetailsButton(),
-            MerchantReviewTableConstants::EXTRA_DETAILS => $this->generateDetails($merchantReviewEntity),
+            MerchantReviewTableConstants::COL_EXTRA_DETAILS => $this->generateDetails($merchantReviewEntity),
         ];
     }
 

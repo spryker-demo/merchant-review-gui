@@ -20,7 +20,7 @@ class DeleteController extends AbstractController
     /**
      * @var string
      */
-    public const PARAM_MERCHANT_REVIEW_ID = 'id-merchant-review';
+    protected const PARAM_MERCHANT_REVIEW_ID = 'id-merchant-review';
 
     /**
      * @param \Symfony\Component\HttpFoundation\Request $request

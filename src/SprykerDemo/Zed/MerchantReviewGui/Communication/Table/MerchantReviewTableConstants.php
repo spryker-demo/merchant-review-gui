@@ -10,8 +10,6 @@ namespace SprykerDemo\Zed\MerchantReviewGui\Communication\Table;
 use Orm\Zed\Customer\Persistence\Map\SpyCustomerTableMap;
 use Orm\Zed\MerchantReview\Persistence\Map\SpyMerchantReviewTableMap;
 use Spryker\Zed\Gui\Communication\Table\TableConfiguration;
-use SprykerDemo\Zed\MerchantReviewGui\Communication\Controller\ReviewStatusController;
-use SprykerDemo\Zed\MerchantReviewGui\Persistence\MerchantReviewGuiRepository;
 
 /**
  * Declares global environment configuration keys. Do not use it for other class constants.
@@ -31,12 +29,12 @@ interface MerchantReviewTableConstants
     /**
      * @var string
      */
-    public const PARAM_ID = ReviewStatusController::PARAM_MERCHANT_REVIEW_ID;
+    public const PARAM_ID = 'id-merchant-review';
 
     /**
      * @var string
      */
-    public const PARAM_STATUS = ReviewStatusController::PARAM_MERCHANT_REVIEW_STATUS;
+    public const PARAM_STATUS = 'status';
 
     /**
      * @var string
@@ -116,15 +114,15 @@ interface MerchantReviewTableConstants
     /**
      * @var string
      */
-    public const COL_MERCHANT_REVIEW_GUI_FIRST_NAME = MerchantReviewGuiRepository::FIELD_CUSTOMER_FIRST_NAME;
+    public const COL_MERCHANT_REVIEW_GUI_FIRST_NAME = 'first_name';
 
     /**
      * @var string
      */
-    public const COL_MERCHANT_REVIEW_GUI_LAST_NAME = MerchantReviewGuiRepository::FIELD_CUSTOMER_LAST_NAME;
+    public const COL_MERCHANT_REVIEW_GUI_LAST_NAME = 'last_name';
 
     /**
      * @var string
      */
-    public const EXTRA_DETAILS = 'details';
+    public const COL_EXTRA_DETAILS = 'details';
 }

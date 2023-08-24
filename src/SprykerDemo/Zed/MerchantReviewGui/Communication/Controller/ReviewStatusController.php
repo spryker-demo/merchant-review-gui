@@ -20,12 +20,12 @@ class ReviewStatusController extends AbstractController
     /**
      * @var string
      */
-    public const PARAM_MERCHANT_REVIEW_ID = 'id-merchant-review';
+    protected const PARAM_MERCHANT_REVIEW_ID = 'id-merchant-review';
 
     /**
      * @var string
      */
-    public const PARAM_MERCHANT_REVIEW_STATUS = 'status';
+    protected const PARAM_MERCHANT_REVIEW_STATUS = 'status';
 
     /**
      * @var string
