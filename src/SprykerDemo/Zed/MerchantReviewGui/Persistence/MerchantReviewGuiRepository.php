@@ -14,7 +14,6 @@ use Orm\Zed\MerchantReview\Persistence\SpyMerchantReviewQuery;
 use Spryker\Zed\Kernel\Persistence\AbstractRepository;
 
 /**
- *
  * @method \SprykerDemo\Zed\MerchantReviewGui\Persistence\MerchantReviewGuiPersistenceFactory getFactory()
  */
 class MerchantReviewGuiRepository extends AbstractRepository implements MerchantReviewGuiRepositoryInterface
