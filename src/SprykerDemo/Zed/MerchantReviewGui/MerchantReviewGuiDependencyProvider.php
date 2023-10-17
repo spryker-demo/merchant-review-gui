@@ -138,8 +138,8 @@ class MerchantReviewGuiDependencyProvider extends AbstractBundleDependencyProvid
      */
     protected function addMerchantReviewQuery(Container $container): void
     {
-        $container->set(static::PROPEL_MERCHANT_REVIEW_QUERY, function () {
+        $container->set(static::PROPEL_MERCHANT_REVIEW_QUERY, $container->factory(function () {
             return SpyMerchantReviewQuery::create();
-        });
+        }));
     }
 }
