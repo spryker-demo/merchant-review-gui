@@ -55,17 +55,6 @@ class MerchantReviewGuiDependencyProvider extends AbstractBundleDependencyProvid
         $this->addMerchantFacade($container);
         $this->addUtilSanitizeService($container);
         $this->addUtilDateTimeService($container);
-
-        return $container;
-    }
-
-    /**
-     * @param \Spryker\Zed\Kernel\Container $container
-     *
-     * @return \Spryker\Zed\Kernel\Container
-     */
-    public function providePersistenceLayerDependencies(Container $container): Container
-    {
         $this->addMerchantReviewQuery($container);
 
         return $container;

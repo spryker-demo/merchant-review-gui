@@ -43,7 +43,7 @@ class DeleteController extends AbstractController
 
         $this->getFactory()
             ->getMerchantReviewFacade()
-            ->deleteMerchantReview($idMerchantReview);
+            ->deleteMerchantReviewById($idMerchantReview);
 
         $this->addSuccessMessage('Merchant Review #%id% deleted successfully.', [
             '%id%' => $idMerchantReview,

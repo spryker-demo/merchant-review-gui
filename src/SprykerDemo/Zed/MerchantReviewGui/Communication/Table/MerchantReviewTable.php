@@ -7,7 +7,11 @@
 
 namespace SprykerDemo\Zed\MerchantReviewGui\Communication\Table;
 
+use Orm\Zed\Customer\Persistence\Map\SpyCustomerTableMap;
+use Orm\Zed\Merchant\Persistence\Map\SpyMerchantTableMap;
+use Orm\Zed\MerchantReview\Persistence\Map\SpyMerchantReviewTableMap;
 use Orm\Zed\MerchantReview\Persistence\SpyMerchantReview;
+use Orm\Zed\MerchantReview\Persistence\SpyMerchantReviewQuery;
 use Spryker\Service\UtilDateTime\UtilDateTimeServiceInterface;
 use Spryker\Service\UtilSanitize\UtilSanitizeServiceInterface;
 use Spryker\Service\UtilText\Model\Url\Url;
@@ -15,14 +19,13 @@ use Spryker\Zed\Gui\Communication\Table\AbstractTable;
 use Spryker\Zed\Gui\Communication\Table\TableConfiguration;
 use SprykerDemo\Zed\MerchantReviewGui\Communication\Form\DeleteMerchantReviewForm;
 use SprykerDemo\Zed\MerchantReviewGui\Communication\Form\StatusMerchantReviewForm;
-use SprykerDemo\Zed\MerchantReviewGui\Persistence\MerchantReviewGuiRepositoryInterface;
 
 class MerchantReviewTable extends AbstractTable
 {
     /**
-     * @var \SprykerDemo\Zed\MerchantReviewGui\Persistence\MerchantReviewGuiRepositoryInterface
+     * @var \Orm\Zed\MerchantReview\Persistence\SpyMerchantReviewQuery
      */
-    protected MerchantReviewGuiRepositoryInterface $merchantReviewGuiPersistenceRepository;
+    protected SpyMerchantReviewQuery $merchantReviewQuery;
 
     /**
      * @var \Spryker\Service\UtilDateTime\UtilDateTimeServiceInterface
@@ -35,16 +38,16 @@ class MerchantReviewTable extends AbstractTable
     protected UtilSanitizeServiceInterface $utilSanitizeService;
 
     /**
-     * @param \SprykerDemo\Zed\MerchantReviewGui\Persistence\MerchantReviewGuiRepositoryInterface $merchantReviewGuiPersistenceRepository
+     * @param \Orm\Zed\MerchantReview\Persistence\SpyMerchantReviewQuery $merchantReviewQuery
      * @param \Spryker\Service\UtilDateTime\UtilDateTimeServiceInterface $utilDateTimeService
      * @param \Spryker\Service\UtilSanitize\UtilSanitizeServiceInterface $utilSanitizeService
      */
     public function __construct(
-        MerchantReviewGuiRepositoryInterface $merchantReviewGuiPersistenceRepository,
+        SpyMerchantReviewQuery $merchantReviewQuery,
         UtilDateTimeServiceInterface $utilDateTimeService,
         UtilSanitizeServiceInterface $utilSanitizeService
     ) {
-        $this->merchantReviewGuiPersistenceRepository = $merchantReviewGuiPersistenceRepository;
+        $this->merchantReviewQuery = $merchantReviewQuery;
         $this->utilDateTimeService = $utilDateTimeService;
         $this->utilSanitizeService = $utilSanitizeService;
     }
@@ -114,7 +117,14 @@ class MerchantReviewTable extends AbstractTable
      */
     protected function prepareData(TableConfiguration $config): array
     {
-        $query = $this->merchantReviewGuiPersistenceRepository->getMerchantReviewQuery();
+        $query = $this->merchantReviewQuery
+            ->addJoin(SpyMerchantReviewTableMap::COL_CUSTOMER_REFERENCE, SpyCustomerTableMap::COL_CUSTOMER_REFERENCE)
+            ->addJoin(SpyMerchantReviewTableMap::COL_FK_MERCHANT, SpyMerchantTableMap::COL_ID_MERCHANT)
+            ->withColumn(SpyMerchantReviewTableMap::COL_CREATED_AT, MerchantReviewTableConstants::COL_CREATED)
+            ->withColumn(SpyMerchantTableMap::COL_NAME, MerchantReviewTableConstants::COL_MERCHANT_NAME)
+            ->withColumn(SpyCustomerTableMap::COL_ID_CUSTOMER, MerchantReviewTableConstants::COL_MERCHANT_REVIEW_GUI_ID_CUSTOMER)
+            ->withColumn(SpyCustomerTableMap::COL_FIRST_NAME, MerchantReviewTableConstants::COL_CUSTOMER_FIRST_NAME)
+            ->withColumn(SpyCustomerTableMap::COL_LAST_NAME, MerchantReviewTableConstants::COL_CUSTOMER_LAST_NAME);
 
         $merchantReviewCollection = $this->runQuery($query, $config, true);
 

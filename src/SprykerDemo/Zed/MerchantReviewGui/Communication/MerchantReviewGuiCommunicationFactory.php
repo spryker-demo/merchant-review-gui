@@ -7,6 +7,7 @@
 
 namespace SprykerDemo\Zed\MerchantReviewGui\Communication;
 
+use Orm\Zed\MerchantReview\Persistence\SpyMerchantReviewQuery;
 use Spryker\Service\UtilDateTime\UtilDateTimeServiceInterface;
 use Spryker\Service\UtilSanitize\UtilSanitizeServiceInterface;
 use Spryker\Zed\Customer\Business\CustomerFacadeInterface;
@@ -19,9 +20,6 @@ use SprykerDemo\Zed\MerchantReviewGui\Communication\Table\MerchantReviewTable;
 use SprykerDemo\Zed\MerchantReviewGui\MerchantReviewGuiDependencyProvider;
 use Symfony\Component\Form\FormInterface;
 
-/**
- * @method \SprykerDemo\Zed\MerchantReviewGui\Persistence\MerchantReviewGuiRepositoryInterface getRepository()()
- */
 class MerchantReviewGuiCommunicationFactory extends AbstractCommunicationFactory
 {
     /**
@@ -30,7 +28,7 @@ class MerchantReviewGuiCommunicationFactory extends AbstractCommunicationFactory
     public function createMerchantReviewTable(): MerchantReviewTable
     {
         return new MerchantReviewTable(
-            $this->getRepository(),
+            $this->getMerchantReviewQuery(),
             $this->getUtilDateTimeService(),
             $this->getUtilSanitizeServiceInterface(),
         );
@@ -42,6 +40,14 @@ class MerchantReviewGuiCommunicationFactory extends AbstractCommunicationFactory
     protected function getUtilDateTimeService(): UtilDateTimeServiceInterface
     {
         return $this->getProvidedDependency(MerchantReviewGuiDependencyProvider::SERVICE_UTIL_DATE_TIME);
+    }
+
+    /**
+     * @return \Orm\Zed\MerchantReview\Persistence\SpyMerchantReviewQuery
+     */
+    public function getMerchantReviewQuery(): SpyMerchantReviewQuery
+    {
+        return $this->getProvidedDependency(MerchantReviewGuiDependencyProvider::PROPEL_MERCHANT_REVIEW_QUERY);
     }
 
     /**
