@@ -123,8 +123,8 @@ class MerchantReviewTable extends AbstractTable
             ->withColumn(SpyMerchantReviewTableMap::COL_CREATED_AT, MerchantReviewTableConstants::COL_CREATED)
             ->withColumn(SpyMerchantTableMap::COL_NAME, MerchantReviewTableConstants::COL_MERCHANT_NAME)
             ->withColumn(SpyCustomerTableMap::COL_ID_CUSTOMER, MerchantReviewTableConstants::COL_MERCHANT_REVIEW_GUI_ID_CUSTOMER)
-            ->withColumn(SpyCustomerTableMap::COL_FIRST_NAME, MerchantReviewTableConstants::COL_CUSTOMER_FIRST_NAME)
-            ->withColumn(SpyCustomerTableMap::COL_LAST_NAME, MerchantReviewTableConstants::COL_CUSTOMER_LAST_NAME);
+            ->withColumn(SpyCustomerTableMap::COL_FIRST_NAME, MerchantReviewTableConstants::COL_MERCHANT_REVIEW_GUI_FIRST_NAME)
+            ->withColumn(SpyCustomerTableMap::COL_LAST_NAME, MerchantReviewTableConstants::COL_MERCHANT_REVIEW_GUI_LAST_NAME);
 
         $merchantReviewCollection = $this->runQuery($query, $config, true);
 
