@@ -23,6 +23,16 @@ class DeleteController extends AbstractController
     protected const PARAM_MERCHANT_REVIEW_ID = 'id-merchant-review';
 
     /**
+     * @var string
+     */
+    protected const MESSAGE_ERROR_CSRF_TOKEN_IS_NOT_VALID = 'CSRF token is not valid';
+
+    /**
+     * @var string
+     */
+    protected const MESSAGE_SUCCESS_MERCHANT_REVIEW_ID_DELETE = 'Merchant Review #%id% deleted successfully.';
+
+    /**
      * @param \Symfony\Component\HttpFoundation\Request $request
      *
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
@@ -32,7 +42,7 @@ class DeleteController extends AbstractController
         $form = $this->getFactory()->getDeleteMerchantReviewForm()->handleRequest($request);
 
         if (!$form->isSubmitted() || !$form->isValid()) {
-            $this->addErrorMessage('CSRF token is not valid');
+            $this->addErrorMessage(static::MESSAGE_ERROR_CSRF_TOKEN_IS_NOT_VALID);
 
             return $this->redirectResponse(
                 Url::generate('/merchant-review-gui')->build(),
@@ -45,7 +55,7 @@ class DeleteController extends AbstractController
             ->getMerchantReviewFacade()
             ->deleteMerchantReviewById($idMerchantReview);
 
-        $this->addSuccessMessage('Merchant Review #%id% deleted successfully.', [
+        $this->addSuccessMessage(static::MESSAGE_SUCCESS_MERCHANT_REVIEW_ID_DELETE, [
             '%id%' => $idMerchantReview,
         ]);
 
