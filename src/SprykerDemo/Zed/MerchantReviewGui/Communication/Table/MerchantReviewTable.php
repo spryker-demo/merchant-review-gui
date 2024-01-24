@@ -17,6 +17,7 @@ use Spryker\Service\UtilSanitize\UtilSanitizeServiceInterface;
 use Spryker\Service\UtilText\Model\Url\Url;
 use Spryker\Zed\Gui\Communication\Table\AbstractTable;
 use Spryker\Zed\Gui\Communication\Table\TableConfiguration;
+use Spryker\Zed\Translator\Business\TranslatorFacadeInterface;
 use SprykerDemo\Zed\MerchantReviewGui\Communication\Form\DeleteMerchantReviewForm;
 use SprykerDemo\Zed\MerchantReviewGui\Communication\Form\StatusMerchantReviewForm;
 
@@ -38,18 +39,26 @@ class MerchantReviewTable extends AbstractTable
     protected UtilSanitizeServiceInterface $utilSanitizeService;
 
     /**
+     * @var \Spryker\Zed\Translator\Business\TranslatorFacadeInterface
+     */
+    protected TranslatorFacadeInterface $translatorFacade;
+
+    /**
      * @param \Orm\Zed\MerchantReview\Persistence\SpyMerchantReviewQuery $merchantReviewQuery
      * @param \Spryker\Service\UtilDateTime\UtilDateTimeServiceInterface $utilDateTimeService
      * @param \Spryker\Service\UtilSanitize\UtilSanitizeServiceInterface $utilSanitizeService
+     * @param \Spryker\Zed\Translator\Business\TranslatorFacadeInterface $translatorFacade
      */
     public function __construct(
         SpyMerchantReviewQuery $merchantReviewQuery,
         UtilDateTimeServiceInterface $utilDateTimeService,
-        UtilSanitizeServiceInterface $utilSanitizeService
+        UtilSanitizeServiceInterface $utilSanitizeService,
+        TranslatorFacadeInterface $translatorFacade
     ) {
         $this->merchantReviewQuery = $merchantReviewQuery;
         $this->utilDateTimeService = $utilDateTimeService;
         $this->utilSanitizeService = $utilSanitizeService;
+        $this->translatorFacade = $translatorFacade;
     }
 
     /**
@@ -328,15 +337,17 @@ class MerchantReviewTable extends AbstractTable
         return sprintf(
             '<table class="details">
                 <tr>
-                    <th>Summary</th>
+                    <th> %s </th>
                     <td>%s</td>
                 </tr>
                 <tr>
-                    <th>Description</th>
+                    <th>%s</th>
                     <td>%s</td>
                 </tr>
             </table>',
+            $this->translatorFacade->trans('Summary'),
             $merchantReviewEntity->getSummary() ? $this->utilSanitizeService->escapeHtml($merchantReviewEntity->getSummary()) : '',
+            $this->translatorFacade->trans('Description'),
             $merchantReviewEntity->getDescription() ? $this->utilSanitizeService->escapeHtml($merchantReviewEntity->getDescription()) : '',
         );
     }

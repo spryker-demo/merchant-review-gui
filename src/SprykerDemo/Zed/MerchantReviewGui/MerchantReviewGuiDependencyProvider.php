@@ -44,6 +44,11 @@ class MerchantReviewGuiDependencyProvider extends AbstractBundleDependencyProvid
     public const FACADE_MERCHANT = 'FACADE_MERCHANT';
 
     /**
+     * @var string
+     */
+    public const FACADE_TRANSLATOR = 'FACADE_TRANSLATOR';
+
+    /**
      * @param \Spryker\Zed\Kernel\Container $container
      *
      * @return \Spryker\Zed\Kernel\Container
@@ -56,6 +61,7 @@ class MerchantReviewGuiDependencyProvider extends AbstractBundleDependencyProvid
         $this->addUtilSanitizeService($container);
         $this->addUtilDateTimeService($container);
         $this->addMerchantReviewQuery($container);
+        $this->addTranslatorFacade($container);
 
         return $container;
     }
@@ -130,5 +136,17 @@ class MerchantReviewGuiDependencyProvider extends AbstractBundleDependencyProvid
         $container->set(static::PROPEL_MERCHANT_REVIEW_QUERY, $container->factory(function () {
             return SpyMerchantReviewQuery::create();
         }));
+    }
+
+    /**
+     * @param \Spryker\Zed\Kernel\Container $container
+     *
+     * @return void
+     */
+    protected function addTranslatorFacade(Container $container): void
+    {
+        $container->set(static::FACADE_TRANSLATOR, function (Container $container) {
+            return $container->getLocator()->translator()->facade();
+        });
     }
 }
