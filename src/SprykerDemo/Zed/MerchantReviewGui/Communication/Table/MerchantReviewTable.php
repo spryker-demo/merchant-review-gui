@@ -337,7 +337,7 @@ class MerchantReviewTable extends AbstractTable
         return sprintf(
             '<table class="details">
                 <tr>
-                    <th> %s </th>
+                    <th>%s</th>
                     <td>%s</td>
                 </tr>
                 <tr>
