@@ -12,6 +12,7 @@ use Spryker\Service\UtilDateTime\UtilDateTimeServiceInterface;
 use Spryker\Service\UtilSanitize\UtilSanitizeServiceInterface;
 use Spryker\Zed\Customer\Business\CustomerFacadeInterface;
 use Spryker\Zed\Kernel\Communication\AbstractCommunicationFactory;
+use Spryker\Zed\Locale\Business\LocaleFacadeInterface;
 use Spryker\Zed\Merchant\Business\MerchantFacadeInterface;
 use Spryker\Zed\Translator\Business\TranslatorFacadeInterface;
 use SprykerDemo\Zed\MerchantReview\Business\MerchantReviewFacadeInterface;
@@ -33,6 +34,7 @@ class MerchantReviewGuiCommunicationFactory extends AbstractCommunicationFactory
             $this->getUtilDateTimeService(),
             $this->getUtilSanitizeServiceInterface(),
             $this->getTranslatorFacade(),
+            $this->getLocaleFacade(),
         );
     }
 
@@ -106,5 +108,13 @@ class MerchantReviewGuiCommunicationFactory extends AbstractCommunicationFactory
     public function getTranslatorFacade(): TranslatorFacadeInterface
     {
         return $this->getProvidedDependency(MerchantReviewGuiDependencyProvider::FACADE_TRANSLATOR);
+    }
+
+    /**
+     * @return \Spryker\Zed\Locale\Business\LocaleFacadeInterface
+     */
+    public function getLocaleFacade(): LocaleFacadeInterface
+    {
+        return $this->getProvidedDependency(MerchantReviewGuiDependencyProvider::FACADE_LOCALE);
     }
 }

@@ -49,6 +49,11 @@ class MerchantReviewGuiDependencyProvider extends AbstractBundleDependencyProvid
     public const FACADE_TRANSLATOR = 'FACADE_TRANSLATOR';
 
     /**
+     * @var string
+     */
+    public const FACADE_LOCALE = 'FACADE_LOCALE';
+
+    /**
      * @param \Spryker\Zed\Kernel\Container $container
      *
      * @return \Spryker\Zed\Kernel\Container
@@ -62,6 +67,7 @@ class MerchantReviewGuiDependencyProvider extends AbstractBundleDependencyProvid
         $this->addUtilDateTimeService($container);
         $this->addMerchantReviewQuery($container);
         $this->addTranslatorFacade($container);
+        $this->addLocaleFacade($container);
 
         return $container;
     }
@@ -147,6 +153,18 @@ class MerchantReviewGuiDependencyProvider extends AbstractBundleDependencyProvid
     {
         $container->set(static::FACADE_TRANSLATOR, function (Container $container) {
             return $container->getLocator()->translator()->facade();
+        });
+    }
+
+    /**
+     * @param \Spryker\Zed\Kernel\Container $container
+     *
+     * @return void
+     */
+    protected function addLocaleFacade(Container $container): void
+    {
+        $container->set(static::FACADE_LOCALE, function (Container $container) {
+            return $container->getLocator()->locale()->facade();
         });
     }
 }

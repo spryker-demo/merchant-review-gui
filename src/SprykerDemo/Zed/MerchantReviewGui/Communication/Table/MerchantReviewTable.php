@@ -17,6 +17,7 @@ use Spryker\Service\UtilSanitize\UtilSanitizeServiceInterface;
 use Spryker\Service\UtilText\Model\Url\Url;
 use Spryker\Zed\Gui\Communication\Table\AbstractTable;
 use Spryker\Zed\Gui\Communication\Table\TableConfiguration;
+use Spryker\Zed\Locale\Business\LocaleFacadeInterface;
 use Spryker\Zed\Translator\Business\TranslatorFacadeInterface;
 use SprykerDemo\Zed\MerchantReviewGui\Communication\Form\DeleteMerchantReviewForm;
 use SprykerDemo\Zed\MerchantReviewGui\Communication\Form\StatusMerchantReviewForm;
@@ -44,21 +45,29 @@ class MerchantReviewTable extends AbstractTable
     protected TranslatorFacadeInterface $translatorFacade;
 
     /**
+     * @var \Spryker\Zed\Locale\Business\LocaleFacadeInterface
+     */
+    protected LocaleFacadeInterface $localeFacade;
+
+    /**
      * @param \Orm\Zed\MerchantReview\Persistence\SpyMerchantReviewQuery $merchantReviewQuery
      * @param \Spryker\Service\UtilDateTime\UtilDateTimeServiceInterface $utilDateTimeService
      * @param \Spryker\Service\UtilSanitize\UtilSanitizeServiceInterface $utilSanitizeService
      * @param \Spryker\Zed\Translator\Business\TranslatorFacadeInterface $translatorFacade
+     * @param \Spryker\Zed\Locale\Business\LocaleFacadeInterface $localeFacade
      */
     public function __construct(
         SpyMerchantReviewQuery $merchantReviewQuery,
         UtilDateTimeServiceInterface $utilDateTimeService,
         UtilSanitizeServiceInterface $utilSanitizeService,
-        TranslatorFacadeInterface $translatorFacade
+        TranslatorFacadeInterface $translatorFacade,
+        LocaleFacadeInterface $localeFacade
     ) {
         $this->merchantReviewQuery = $merchantReviewQuery;
         $this->utilDateTimeService = $utilDateTimeService;
         $this->utilSanitizeService = $utilSanitizeService;
         $this->translatorFacade = $translatorFacade;
+        $this->localeFacade = $localeFacade;
     }
 
     /**
@@ -134,6 +143,9 @@ class MerchantReviewTable extends AbstractTable
             ->withColumn(SpyCustomerTableMap::COL_ID_CUSTOMER, MerchantReviewTableConstants::COL_MERCHANT_REVIEW_GUI_ID_CUSTOMER)
             ->withColumn(SpyCustomerTableMap::COL_FIRST_NAME, MerchantReviewTableConstants::COL_MERCHANT_REVIEW_GUI_FIRST_NAME)
             ->withColumn(SpyCustomerTableMap::COL_LAST_NAME, MerchantReviewTableConstants::COL_MERCHANT_REVIEW_GUI_LAST_NAME);
+
+        $currentLocale = $this->localeFacade->getCurrentLocale();
+        $query->filterByFkLocale($currentLocale->getIdLocale());
 
         $merchantReviewCollection = $this->runQuery($query, $config, true);
 
