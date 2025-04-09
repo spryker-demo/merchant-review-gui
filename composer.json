@@ -4,7 +4,7 @@
     "description": "MerchantReviewGui module",
     "license": "proprietary",
     "require": {
-        "php": ">=8.0",
+        "php": ">=8.2",
         "spryker-demo/merchant-review": "^1.0.0",
         "spryker/customer": "^7.51.0",
         "spryker/gui": "^3.47.0",
